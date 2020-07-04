@@ -21,3 +21,14 @@ Route::get('/sign', function()
 {
 	return view('app.sign')->with(['user_id'=>1]);
 });
+
+
+Route::get('/login', function()
+{
+	return "<a href='" . env("APP_URL_USER") . "'>Debe acceder por este enlace.</a>";
+})->name('login');
+
+Route::post('/logout', [
+	'as' => 'logout',
+	'uses' => 'Auth\LoginController@logout'
+]);
