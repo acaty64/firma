@@ -23,6 +23,11 @@ Route::post('/guide', [
 	'uses' => 'Api\GuideController@init'
 ]);
 
+// Route::post('/guide/sign', function(Request $request)
+// {
+// 	return "route";
+// });
+
 Route::post('/guide/sign', [
 	'as' => 'guide.sign',
 	'uses' => 'Api\GuideController@sign'

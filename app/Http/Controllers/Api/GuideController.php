@@ -15,13 +15,6 @@ class GuideController extends Controller
         $user_id = $request->user_id;
 
 		try {
-            // $path = $this->pathView($user_id);
-            // if(!file_exists($path)){
-            //     mkdir($path);
-            // }else{
-            //     array_map('unlink', glob($path . "*.png"));
-            // }
-
             $fileSign = $request->file_sign->store('images/view/' . $user_id, 'local');
             $file_in = $this->pathView($user_id) . basename($fileSign);
 
@@ -35,6 +28,10 @@ class GuideController extends Controller
             $file_out = $this->pathOriginal($user_id) . basename($fileSign);
             copy($file_in, $file_out);
 
+            if(!file_exists($file_out)){
+                return ['success'=> false, 'mess' => 'No se creo el archivo ' . $file_out];
+            }
+
             $path = $this->pathWork($user_id);
             if(!file_exists($path)){
                 mkdir($path);
@@ -43,14 +40,19 @@ class GuideController extends Controller
             }
 
             $file_out = $this->pathWork($user_id) . basename($fileSign);
+
             copy($file_in, $file_out);
+
+            if(!file_exists($file_out)){
+                return ['success'=> false, 'mess' => 'No se creo el archivo ' . $file_out];
+            }
 
 		} catch (Exception $e) {
             return false;			
 		}
         
 		$filename = basename($fileSign);
-        // $filename = basename($fileSign).PHP_EOL;
+
     	$file_sign = [ 
     			'filepath' => $this->pathView($user_id) . $filename,
                 'filework' => $this->pathWork($user_id) . $filename,
@@ -71,9 +73,9 @@ class GuideController extends Controller
         $porc = 0.3; 
 
         $stamp = $this->resizeImage($file_sign['filepath'], $porc);
-
         $this->saveFromImage($stamp, $file_sign['filepath']);
 
+// dd( ["Api/GuideController@sign", $file_sign]);
 		return $file_sign;
 	}
 
@@ -146,10 +148,8 @@ class GuideController extends Controller
     	} else {
             $filepath = $this->pathView($user_id) . $filename;
     		$path = 'images/view/' . $user_id . '/';
-// if($request->filefirma != 'sign_guide.png'){
-//     return ['success' =>true, 'mess'=>'GuideController@init', 'datos' => $filepath];
-// }
     	}
+
     	$file_stamp = [ 
     			'filepath' => $filepath,
     			'filename' => $filename,
@@ -182,8 +182,6 @@ class GuideController extends Controller
     		'success' => true,
     		'filebase' => $response
     	];
-    	// return ['filebase' => 'page.jpg'];
-
     }
 
 }

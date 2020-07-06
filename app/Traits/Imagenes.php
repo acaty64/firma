@@ -5,6 +5,7 @@ namespace App\Traits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use \Imagick;
+use \PDF;
 
 trait Imagenes
 {
@@ -40,17 +41,18 @@ trait Imagenes
 
     public function addStamp($file_in, $file_sign, $seccion, $posX, $posY, $file_out)
     {
-
         $file_in = $file_in['filepath'];
         $file_stamp = $file_sign['filepath'];
 
         if(!file_exists($file_in)){
             return false;
         }
+        
         $img = $this->imageFromFile($file_in);
 
         $stamp = $this->imageFromFile($file_stamp);
-        if(array_key_exists('porc_sign',$file_sign)){
+// dd('Imagenes@addStamp', $stamp);
+        if(array_key_exists('porc_sign', $file_sign)){
             $stamp = $this->resizeImage($file_stamp, $file_sign['porc_sign']/100);
         }
 
@@ -110,7 +112,6 @@ trait Imagenes
         // list($ancho, $alto) = getimagesize($filepath);
         
         $imagen = $this->imageFromFile($filepath);
-
         $ancho = imagesx($imagen);
         $alto = imagesy($imagen);
 
@@ -119,15 +120,18 @@ trait Imagenes
 
         // Cargar
         $thumb = imagecreatetruecolor($nuevo_ancho, $nuevo_alto);
+
         $origen = $this->imageFromFile($filepath);
 
+// dd('resizeImage', $origen);
         header('Content-Type: image/png');
         imagealphablending($thumb, false);
         imagesavealpha($thumb, true);
-
+        
         // Cambiar el tamaño
         imagecopyresized($thumb, $origen, 0, 0, 0, 0, $nuevo_ancho, $nuevo_alto, $ancho, $alto);
 
+// dd('resizeImage', $thumb);
         return $thumb;
         // Imprimir
         // imagejpeg($thumb);       
@@ -135,7 +139,7 @@ trait Imagenes
 
     public function saveFromImage($image, $fileout)
     {
-// dd($image);
+// dd($fileout);
         $puntos=explode(".", $fileout);
         $extensionimagenorig=$puntos[count($puntos)-1];
 
@@ -268,33 +272,33 @@ trait Imagenes
 
     }
     
-    public function convert(Request $request)
-    {
-        $originalName = $request->file('pdf')->getClientOriginalName();
+    // public function convert(Request $request)
+    // {
+    //     $originalName = $request->file('pdf')->getClientOriginalName();
         
-        $localFile = $request->pdf->store('/tmp', 'local');
-        // $imagick = new Imagick();
+    //     $localFile = $request->pdf->store('/tmp', 'local');
+    //     // $imagick = new Imagick();
 
-        $srcimg = storage_path() . '/app/public/' . $localFile;
-        if(file_exists($srcimg)){
-            $fileNameJpeg = substr($originalName, 0, strlen($originalName)-4) . '.jpeg';
-            $targetimg = storage_path() . '/app/public/tmp/' . $fileNameJpeg;
+    //     $srcimg = storage_path() . '/app/public/' . $localFile;
+    //     if(file_exists($srcimg)){
+    //         $fileNameJpeg = substr($originalName, 0, strlen($originalName)-4) . '.jpeg';
+    //         $targetimg = storage_path() . '/app/public/tmp/' . $fileNameJpeg;
 
-            $im = new imagick();
-            $im->setResolution(300, 300);
-            $im->readImage($srcimg);
-            $im->setImageFormat('jpeg');
-            $im->setImageCompression(imagick::COMPRESSION_JPEG); 
-            $im->setImageCompressionQuality(100);
-            $im->writeImages($targetimg, false);
-            unlink($srcimg);
-            // $this->addStamp($targetimg . "-0");
-            $response = $this->addStamp($fileNameJpeg);
+    //         $im = new imagick();
+    //         $im->setResolution(300, 300);
+    //         $im->readImage($srcimg);
+    //         $im->setImageFormat('jpeg');
+    //         $im->setImageCompression(imagick::COMPRESSION_JPEG); 
+    //         $im->setImageCompressionQuality(100);
+    //         $im->writeImages($targetimg, false);
+    //         unlink($srcimg);
+    //         // $this->addStamp($targetimg . "-0");
+    //         $response = $this->addStamp($fileNameJpeg);
         
-            return view('app.image.index');
-        }
+    //         return view('app.image.index');
+    //     }
     
-        return false;
-    }
+    //     return false;
+    // }
 
 }
