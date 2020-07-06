@@ -119,11 +119,13 @@
 							</div>
 						</div>
 					</div>
+					<div v-if="waiting" class="card-body">
+						<img src="images/wait.gif"/>
+					</div>
 					<div v-if="stat_preview" class="card-body">
 						<div class="row">
 							<div class="preview col-md-12">
-								<iframe :src="filepreview" style="width: 100%; height:50vw; position: relative; allowfullscreen;"></iframe>					
-								<!-- <iframe :src="filepreview" frameborder="0" width="100%" height="300" style="display:block; margin:0; padding:0; max-width: 100%; width: 100%; height:auto;"></iframe>					 -->
+								<iframe :src="filepreview" style="width: 100%; height:50vw; position: relative; allowfullscreen;"></iframe>
 							</div>
 						</div>
 					</div>
@@ -139,6 +141,7 @@
 		props: ['user_id'],
 		data() {
 			return {
+				'waiting' : false,
 				'loaded' : false,
 				'files_loaded': {
 					'sign' : false,
@@ -234,6 +237,7 @@
 			getPreview()
 			{
 				this.stat_preview = false;
+				this.waiting = true;
 				var request = {
 					user_id: this.user_id,
 					filefirma : {
@@ -262,6 +266,7 @@
 						console.log('error preview, no se grabo');
 					}else{
 						this.stat_preview = true;
+						this.waiting = false;
 					}
 
 				}).catch(function (error) {
@@ -274,6 +279,7 @@
 			{
 				this.files_loaded.back = false;
 				this.stat_preview = false;
+				this.waiting = true;
 				var request = new FormData();
 				request.append('file_back', event.target.files[0]);
 				request.append('user_id', this.user_id);
@@ -285,6 +291,7 @@
 
         	this.fileback = response.data;
         	this.files_loaded.back = true;
+					this.waiting = false;
 
 					// console.log('change_pdf', this.fileback);
 					// console.log('change_pdf', this.files_loaded);

@@ -2044,10 +2044,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user_id'],
   data: function data() {
     return {
+      'waiting': false,
       'loaded': false,
       'files_loaded': {
         'sign': false,
@@ -2138,6 +2141,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.stat_preview = false;
+      this.waiting = true;
       var request = {
         user_id: this.user_id,
         filefirma: {
@@ -2165,6 +2169,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log('error preview, no se grabo');
         } else {
           _this2.stat_preview = true;
+          _this2.waiting = false;
         }
       })["catch"](function (error) {
         console.log('error preview', error);
@@ -2175,6 +2180,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.files_loaded.back = false;
       this.stat_preview = false;
+      this.waiting = true;
       var request = new FormData();
       request.append('file_back', event.target.files[0]);
       request.append('user_id', this.user_id);
@@ -2184,7 +2190,8 @@ __webpack_require__.r(__webpack_exports__);
       axios.post(url, request).then(function (response) {
         console.log('change_pdf response', response.data);
         _this3.fileback = response.data;
-        _this3.files_loaded.back = true; // console.log('change_pdf', this.fileback);
+        _this3.files_loaded.back = true;
+        _this3.waiting = false; // console.log('change_pdf', this.fileback);
         // console.log('change_pdf', this.files_loaded);
       })["catch"](function (error) {
         console.log('error change_pdf', error);
@@ -38911,6 +38918,12 @@ var render = function() {
                         ])
                       : _vm._e()
                   ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.waiting
+              ? _c("div", { staticClass: "card-body" }, [
+                  _c("img", { attrs: { src: "images/wait.gif" } })
                 ])
               : _vm._e(),
             _vm._v(" "),

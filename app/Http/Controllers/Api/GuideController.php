@@ -15,37 +15,37 @@ class GuideController extends Controller
         $user_id = $request->user_id;
 
 		try {
-            $fileSign = $request->file_sign->store('images/view/' . $user_id, 'local');
-            $file_in = $this->pathView($user_id) . basename($fileSign);
+      $fileSign = $request->file_sign->store('images/view/' . $user_id, 'local');
+      $file_in = $this->pathView($user_id) . basename($fileSign);
 
-            $path = $this->pathOriginal($user_id);
-            if(!file_exists($path)){
-                mkdir($path);
-            }else{
-                array_map('unlink', glob($path . "*.png"));
-            }
+      $path = $this->pathOriginal($user_id);
+      if(!file_exists($path)){
+          mkdir($path);
+      }else{
+          array_map('unlink', glob($path . "*.png"));
+      }
 
-            $file_out = $this->pathOriginal($user_id) . basename($fileSign);
-            copy($file_in, $file_out);
+      $file_out = $this->pathOriginal($user_id) . basename($fileSign);
+      copy($file_in, $file_out);
 
-            if(!file_exists($file_out)){
-                return ['success'=> false, 'mess' => 'No se creo el archivo ' . $file_out];
-            }
+      if(!file_exists($file_out)){
+          return ['success'=> false, 'mess' => 'No se creo el archivo ' . $file_out];
+      }
 
-            $path = $this->pathWork($user_id);
-            if(!file_exists($path)){
-                mkdir($path);
-            }else{
-                array_map('unlink', glob($path . "*.png"));
-            }
+      $path = $this->pathWork($user_id);
+      if(!file_exists($path)){
+          mkdir($path);
+      }else{
+          array_map('unlink', glob($path . "*.png"));
+      }
 
-            $file_out = $this->pathWork($user_id) . basename($fileSign);
+      $file_out = $this->pathWork($user_id) . basename($fileSign);
 
-            copy($file_in, $file_out);
+      copy($file_in, $file_out);
 
-            if(!file_exists($file_out)){
-                return ['success'=> false, 'mess' => 'No se creo el archivo ' . $file_out];
-            }
+      if(!file_exists($file_out)){
+          return ['success'=> false, 'mess' => 'No se creo el archivo ' . $file_out];
+      }
 
 		} catch (Exception $e) {
             return false;			
