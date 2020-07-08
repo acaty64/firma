@@ -31,11 +31,6 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
           {{-- Left Side Of Navbar --}}
-            @auth
-              <li class="nav-item">
-                {{ \Session::get('facultad') . ' - ' . \Session::get('sede') }}
-              </li>            
-            @endif
           </ul>
         </div>
         <ul class="navbar-nav ml-auto">
@@ -49,7 +44,8 @@
             @endif
             {{-- <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown"> --}}
             @auth
-              <li class="nav-item dropdown">
+                  {{ Auth::user()->name }}
+{{--               <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                   {{ Auth::user()->name }}
                   <span class="caret">
@@ -63,10 +59,7 @@
                     @csrf
                   </form>
                 </div>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{{ route('access.panel') }}">Accesos</a>
-              </li>
+              </li> --}}
             {{-- @else --}}
             @endif
             {{-- </div>  --}}

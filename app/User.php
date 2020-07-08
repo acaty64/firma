@@ -9,6 +9,13 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use Notifiable;
+    
+    public function __construct($attributes = [])
+    {
+        parent::__construct($attributes);
+        // $this->connection = 'mysql_user';
+        $this->connection = config('app.env') === 'testing' ? 'mysql_tests' : 'mysql_user';
+    }
 
     /**
      * The attributes that are mass assignable.

@@ -13,15 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/sign', [
+	'as' => 'sign',
+	'uses' => 'SignController@index'
+]);
+
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login');
 });
 
-Route::get('/sign', function()
-{
-	return view('app.sign')->with(['user_id'=>1]);
-});
-
+Route::get('/autologin/{id}/{api_token}', [
+	'as' => 'autologin',
+	'uses' => 'LoginController@autologin'
+]);
 
 Route::get('/login', function()
 {
