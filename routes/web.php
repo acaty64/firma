@@ -27,15 +27,19 @@ Route::get('/autologin/{id}/{api_token}', [
 	'uses' => 'LoginController@autologin'
 ]);
 
-Route::get('/login', function()
-{
-	return "<a href='" . env("APP_URL_USER") . "'>Debe acceder por este enlace.</a>";
-})->name('login');
+// Route::get('/login', function()
+// {
+// 	return "<a href='" . env("APP_URL_USER") . "'>Debe acceder por este enlace.</a>";
+// })->name('login');
+Route::get('login', [
+	'as' => 'login',
+	'uses' => 'LoginController@login'
+]);
 
 Route::post('/logout', [
 	'as' => 'logout',
 	'uses' => 'Auth\LoginController@logout'
 ]);
-Auth::routes();
+// Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

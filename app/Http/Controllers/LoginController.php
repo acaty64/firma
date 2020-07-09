@@ -11,10 +11,14 @@ use Laravel\Socialite\Facades\Socialite;
 class LoginController extends Controller
 {
 
+	public function login()
+	{
+		return view('app.unlogued');
+	}
+
 	public function autologin($id, $api_token)
 	{
 		try {
-// dd(\Config::get('database.connections.mysql_user.username'));
 		    $appUser = User::findOrFail($id);
 
 		    if($appUser != null && $api_token == $appUser->refresh_token){
