@@ -62,12 +62,14 @@ class DocController extends Controller
       $back_file = $file;
       $work_file = $file_out['filepath'];
 
+      copy($back_file, $work_file);
+
       // graba una imagen jpeg en path work
-      $img = $this->imageFromFile($back_file);
-      $stamp = $this->imageFromFile($back_file);
-			imagecopy($img, $stamp, 0, 0,
-       0, 0, 0, 0);
-      imagejpeg($img, $work_file, 100);
+   //    $img = $this->imageFromFile($back_file);
+   //    $stamp = $this->imageFromFile($back_file);
+			// imagecopy($img, $stamp, 0, 0,
+   //     0, 0, 0, 0);
+   //    imagejpeg($img, $work_file, 100);
 
   	}
 
@@ -187,7 +189,7 @@ class DocController extends Controller
 		// create Imagick object
 		$imagick = new Imagick();
 		// Sets the image resolution
-		$imagick->setResolution(300, 300);
+		$imagick->setResolution(200, 200);
 		// Reads image from PDF
 		$imagick->readImage($fileBack);
 

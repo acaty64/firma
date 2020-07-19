@@ -91,7 +91,8 @@ trait Imagenes
          0, 0, $wstamp, $hstamp);
 
         //se copia la imagen
-        imagejpeg($img, $file_out['filepath'], 100);
+        imagejpeg($img, $file_out['filepath'], 88);
+
 // dd('imagenes.addStamp', [$img, $stamp, $axisX, $axisY, $wstamp, $hstamp]);
 
         return $file_out;
