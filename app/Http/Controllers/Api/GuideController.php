@@ -42,6 +42,7 @@ class GuideController extends Controller
       $file_out = $this->pathWork($user_id) . basename($fileSign);
 
       copy($file_in, $file_out);
+      chmod($file_out, 0755);
 
       if(!file_exists($file_out)){
           return ['success'=> false, 'mess' => 'No se creo el archivo ' . $file_out];
@@ -88,6 +89,7 @@ class GuideController extends Controller
             $path = $this->pathView($user_id);
             if(!file_exists($path)){
                 mkdir($path);
+                chmod($path, 0755);
             }else{
                 array_map('unlink', glob($path . "*.png"));
             }
@@ -95,6 +97,7 @@ class GuideController extends Controller
             $path = $this->pathBack($user_id);
             if(!file_exists($path)){
                 mkdir($path);
+                chmod($path, 0755);
             }else{
                 array_map('unlink', glob($path . "*.png"));
                 array_map('unlink', glob($path . "*.jpg"));
@@ -103,6 +106,7 @@ class GuideController extends Controller
             $path = $this->pathWork($user_id);
             if(!file_exists($path)){
                 mkdir($path);
+                chmod($path, 0755);
             }else{
                 array_map('unlink', glob($path . "*.png"));
                 array_map('unlink', glob($path . "*.jpg"));
@@ -111,6 +115,7 @@ class GuideController extends Controller
             $path = $this->pathOriginal($user_id);
             if(!file_exists($path)){
                 mkdir($path);
+                chmod($path, 0755);
             }else{
                 array_map('unlink', glob($path . "*.png"));
                 array_map('unlink', glob($path . "*.pdf"));
@@ -119,6 +124,7 @@ class GuideController extends Controller
             $path = $this->pathOut($user_id);
             if(!file_exists($path)){
                 mkdir($path);
+                chmod($path, 0755);
             }else{
                 array_map('unlink', glob($path . "*.pdf"));
             }
