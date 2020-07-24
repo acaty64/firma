@@ -63,13 +63,7 @@ class DocController extends Controller
       $work_file = $file_out['filepath'];
 
       copy($back_file, $work_file);
-
-      // graba una imagen jpeg en path work
-   //    $img = $this->imageFromFile($back_file);
-   //    $stamp = $this->imageFromFile($back_file);
-			// imagecopy($img, $stamp, 0, 0,
-   //     0, 0, 0, 0);
-   //    imagejpeg($img, $work_file, 100);
+      chmod($work_file, 0755);
 
   	}
 
@@ -175,6 +169,7 @@ class DocController extends Controller
 		$path = $this->pathBack($user_id);
         if(!file_exists($path)){
             mkdir($path);
+            chmod($path, 0755);
         }else{
             array_map('unlink', glob($path . "*.pdf"));
         }
@@ -183,6 +178,7 @@ class DocController extends Controller
 		try {
 			$fileBack = $request->file_back->store('images/back/' . $user_id, 'local');
 			$fileBack = $this->pathBack($user_id) . basename($fileBack);
+      chmod($fileBack, 0755);
 		} catch (Exception $e) {
 			return ['success'=>false, 'mess'=>'no se grabo archivo ' . $request->file_back->getClientOriginalName,];
 		}
