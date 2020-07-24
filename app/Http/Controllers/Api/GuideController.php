@@ -76,7 +76,6 @@ class GuideController extends Controller
         $stamp = $this->resizeImage($file_sign['filepath'], $porc);
         $this->saveFromImage($stamp, $file_sign['filepath']);
 
-// dd( ["Api/GuideController@sign", $file_sign]);
 		return $file_sign;
 	}
 

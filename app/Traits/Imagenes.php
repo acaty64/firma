@@ -42,9 +42,7 @@ trait Imagenes
     public function addStamp($file_in, $file_sign, $seccion, $posX, $posY, $file_out)
     {
         $file_in = $file_in['filepath'];
-        chmod($file_in, 0755);
         $file_stamp = $file_sign['filepath'];
-        chmod($file_stamp, 0755);
 
         if(!file_exists($file_in)){
             return false;
