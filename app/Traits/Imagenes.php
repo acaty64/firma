@@ -5,7 +5,6 @@ namespace App\Traits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use \Imagick;
-use \PDF;
 
 trait Imagenes
 {
@@ -17,6 +16,11 @@ trait Imagenes
     public function pathView($user_id)
     {
         return storage_path( 'app/public/images/view/') . $user_id . '/';
+    }
+
+    public function pathPdf($user_id)
+    {
+        return storage_path( 'app/public/images/pdf/') . $user_id . '/';
     }
 
     public function pathOriginal($user_id)
@@ -83,7 +87,6 @@ trait Imagenes
 
         //se copia la imagen
         imagejpeg($img, $file_out['filepath'], 88);
-
         return $file_out;
     
     }
@@ -91,7 +94,6 @@ trait Imagenes
 
     public function resizeImage($filepath, $porc)
     {
-        
         $imagen = $this->imageFromFile($filepath);
         $ancho = imagesx($imagen);
         $alto = imagesy($imagen);
@@ -184,52 +186,61 @@ trait Imagenes
 
     public function jpgToPdf($files, $oldfilename, $user_id)
     {
-
-        $path = $this->pathOut($user_id);
+        $path = $this->pathPdf($user_id);
         if(!file_exists($path)){
             mkdir($path);
+            chmod($path, 0755);
         }else{
             array_map('unlink', glob($path . "*.pdf"));
         }
 
-        $parte = explode(".", $oldfilename);
-
         $namefile = basename($oldfilename, ".pdf");
         $namefile = str_replace(' ', '_', $namefile);
         $namefile = str_replace(',', '', $namefile);
+        $namefile = explode(".", $namefile);
+        $namefile = $namefile[0];
 
-        $newfile = $this->pathOut($user_id) . $namefile . '_firmado.pdf';
-
-        $file_img = [];
+        $files_pdf = [];
         foreach ($files as $file) {
-            $file_storage = 'storage/images/work/' . $user_id . '/' . basename($file);
-            $file_img[] = $file_storage;
+            $file_storage = 'storage/images/work/' . $user_id . '/' . $file['filename'];
+            $check = $this->jpgToOnePdf($file_storage, $user_id);
+            if(!$check){
+                return ['success'=>false, 'message' => 'Error in jpgToPdf ' . $file_storage];
+            }
+            $files_pdf[] = $check['file_out'];
         }       
+        
+        $newfilename = $this->pathOut($user_id) . $namefile . '_firmado.pdf';
 
-        $data = [
-            'originalName' => $oldfilename,
-            'images' => $file_img,
-        ];
-
-        $pdf = \PDF::loadView('pdf.pdfoutfile', $data);
-
-        $namefile = basename($newfile);
-        $newfilename = 'images/out/' . $user_id . '/' . $namefile;
-
-        $check = Storage::put($newfilename, $pdf->output());
-
-        $newfilename = '/storage/images/out/' . $user_id . '/' . $namefile;
-        if(!$check)
-        {
-            return false;
+        $pdf = new \PDFMerger;
+        foreach ($files_pdf as $key => $file) {
+            $pdf->addPDF($file, 'all');
         }
+        $pdf->merge('file', $newfilename);
+        chmod($newfilename, 0755);
 
+        $newfile = '/storage/images/out/' . $user_id . '/' . $namefile . '_firmado.pdf';
         return [
                 'success' => true,
-                'filepath' => $newfilename,
-                'filename' => basename($newfilename),
+                'filepath' => $newfile,
+                'filename' => basename($newfile),
             ];
+    }
 
+    public function jpgToOnePdf($file, $user_id)
+    {
+        try {
+            $filename = explode(".", basename($file));
+            $file_out = 'app/public/images/pdf/' . $user_id . '/' . $filename[0] . '.pdf';
+            $pdf = \PDF::loadView('pdf.pdfoutfile', ['file'=>$file])
+                    ->save(storage_path($file_out));
+            $file_out = $this->pathPdf($user_id) . basename($file_out);
+            chmod($file_out, 0755);
+
+            return ['success' => true, 'file_out' => $file_out];            
+        } catch (Exception $e) {
+            return false;
+        }
     }
     
 }

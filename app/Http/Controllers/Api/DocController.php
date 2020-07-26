@@ -14,6 +14,7 @@ class DocController extends Controller
 
 	public function createNewPages(Request $request)
 	{
+
 		$user_id = $request->user_id;
 		$file_stamp = $request->filefirma;
 		$files = $request->fileback['pages'];
@@ -117,8 +118,9 @@ class DocController extends Controller
 	    		];
 	    	$file_out = $filework[$value-1];
 
-			$check = $this->addStamp($file_in, $back_sign, $seccion, $posX, $posY, $file_out);
+			$this->addStamp($file_in, $back_sign, $seccion, $posX, $posY, $file_out);
 		}
+
 		return [
 			'success' => true, 
 			'mess' => 'createNewPages', 
@@ -135,14 +137,9 @@ class DocController extends Controller
 		$check = $this->createNewPages($request);
 
 		if($check['success']){
-			$files = [];
-			foreach ($check['fileback']['pages'] as $key => $value) {
-				array_push($files, $value['filepath']);
-			}
 
 			$filename = $check['fileback']['filename'];
-
-			$response = $this->jpgToPdf($files, $filename, $user_id);
+			$response = $this->jpgToPdf($check['fileback']['pages'], $filename, $user_id);
 
 			if(!$response)
 			{
@@ -153,8 +150,6 @@ class DocController extends Controller
 		return ['success' =>false, 'mess' => 'error DocController@preview', 'check' => $check ];
 	}
 
-
-	/// TODO: Add in file page.jpg Auth::user->id
 	public function saveBack(Request $request)
 	{
 		$user_id = $request->user_id;

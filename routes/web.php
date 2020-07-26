@@ -1,5 +1,7 @@
 <?php
 
+use Barryvdh\DomPDF\PDF;
+use Dompdf\Dompdf;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,6 +14,35 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+Route::get('/pdf', function()
+{
+
+	$pages = [
+            "/storage/images/work/1/page-0.jpg",
+            "/storage/images/work/1/page-1.jpg",
+            "/storage/images/work/1/page-2.jpg",
+            "/storage/images/work/1/page-3.jpg",
+            "/storage/images/work/1/page-4.jpg",
+            "/storage/images/work/1/page-5.jpg",
+            "/storage/images/work/1/page-6.jpg",
+            "/storage/images/work/1/page-7.jpg",
+            "/storage/images/work/1/page-8.jpg",
+            "/storage/images/work/1/page-9.jpg",
+            ];
+
+    $pdf = \PDF::loadView('pdf.pdfoutfile', ['images'=>$pages]);
+    return $pdf->stream();
+return view('pdf.pdfoutfile', ['images'=>$pages]);
+return $_SESSION;
+
+
+} );
+
+
+
+
 
 Route::get('/sign', [
 	'as' => 'sign',

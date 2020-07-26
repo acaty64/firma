@@ -2,12 +2,9 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <title>{{ $originalName }}</title>
     </head>
     <body>
-        @foreach($images as $image)
-            <img src="{{ asset($image) }}" width="100%" height="100%" />
-        @endforeach
+        <img src="{{ asset($file) }}" width="100%" height="100%" />
     </body>
 </html>
 <style>
