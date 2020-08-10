@@ -31,38 +31,24 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
           {{-- Left Side Of Navbar --}}
+            @if(Auth::user()->id == 1)
+              <a href="{{ route('access.index') }}" class="btn btn-primary mr-2" role="button">Accesos</a>
+              <a href="{{ route('sign') }}" class="btn btn-primary" role="button">Firmas</a>
+            @endif
           </ul>
         </div>
         <ul class="navbar-nav ml-auto">
           {{-- Right Side Of Navbar --}}
-            @if( config('app.debug') )
-              <li class="nav-item">
-                <a class="nav-link" href="{{ route('login') }}">
-                  {{ __('Login') }}
-                </a>
-              </li>
-            @endif
-            {{-- <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown"> --}}
-            @auth
-                  {{ Auth::user()->name }}
-{{--               <li class="nav-item dropdown">
-                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                  {{ Auth::user()->name }}
-                  <span class="caret">
-                  </span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    {{ __('Logout') }}
-                  </a>
-                  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                  </form>
-                </div>
-              </li> --}}
-            {{-- @else --}}
-            @endif
-            {{-- </div>  --}}
+          @if( config('app.debug') )
+            <li class="nav-item">
+              <a class="nav-link" href="{{ route('login') }}">
+                {{ __('Login') }}
+              </a>
+            </li>
+          @endif
+          @auth
+                {{ Auth::user()->name }}
+          @endif
         </ul>
       </div>
     </nav>

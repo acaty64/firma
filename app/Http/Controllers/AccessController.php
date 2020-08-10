@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Access;
+use App\User;
 use Illuminate\Http\Request;
 
 class AccessController extends Controller
@@ -14,7 +15,13 @@ class AccessController extends Controller
      */
     public function index()
     {
-        //
+        if(\Auth::user()->id == 1){
+            return view('app.index', [
+                'users' => User::users(),
+                'no_users' => User::noUsers(),
+            ]);
+        }
+        return view('app.unlogued');
     }
 
     /**
@@ -35,7 +42,11 @@ class AccessController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'newuser' => 'required',
+        ]);
+        Access::create(['user_id' => $request->newuser]);
+        return redirect(route('access.index'));
     }
 
     /**
@@ -78,8 +89,10 @@ class AccessController extends Controller
      * @param  \App\Access  $access
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Access $access)
+    public function destroy($id)
     {
-        //
+        $access = Access::findOrFail($id);
+        $access->delete();
+        return redirect(route('access.index'));
     }
 }

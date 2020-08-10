@@ -15,20 +15,17 @@
 				<div>Bootstrap v4.0.0</div>
 				<div>family=Nunito</div>
 			</span>
+			<span  class="nav navbar-nav list-group-item list-inline" style="color:blue; font-size:75%">
+				<div>User Id: "{{ \Auth::user()->id }}"</div>
+				<div>Tipo: "{{ \Auth::user()->tuser }}"</div>
+				<div>Facu: "{{ \Session::get('facultad_id') }}"</div>
+				<div>Sede: "{{ \Session::get('sede_id') }}"</div>
+			</span>	
+			<div class="row">
+				<div class="nav navbar-nav list-group-item list-inline" id="userType" style="color:red; font-size:75%">
+					Vista: @yield('view')
+				</div>
+			</div>
 		@endif	
-		@guest
-		@else
-		<span  class="nav navbar-nav list-group-item list-inline" style="color:blue; font-size:75%">
-			<div>User Id: "{{ \Auth::user()->id }}"</div>
-			<div>Tipo: "{{ \Auth::user()->tuser }}"</div>
-			<div>Facu: "{{ \Session::get('facultad_id') }}"</div>
-			<div>Sede: "{{ \Session::get('sede_id') }}"</div>
-		</span>	
-		@endguest
-	</div>
-	<div class="row">
-		<div class="nav navbar-nav list-group-item list-inline" id="userType" style="color:red; font-size:75%">
-			Vista: @yield('view')
-		</div>
 	</div>
 </div>
