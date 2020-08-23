@@ -8,9 +8,67 @@ use \Imagick;
 
 trait Imagenes
 {
+
+    public function pdf2png($user_id, $file)
+    {
+        $user_id = $user_id;
+
+        $path = $this->pathPng($user_id);
+        $this->cleanPath($path, 'png');
+
+        $path = $this->pathPng($user_id);
+        $this->cleanPath($path, 'pdf');
+
+        $originalName = $file->getClientOriginalName();
+        try {
+            $fileBack = $file->store('images/png/' . $user_id, 'local');
+            $fileBack = $this->pathPng($user_id) . basename($fileBack);
+            chmod($fileBack, 0755);
+        } catch (Exception $e) {
+            return ['success'=>false, 'mess'=>'no se grabo archivo ' . $originalName,];
+        }
+        $imagick = new Imagick();
+
+        $imagick->setResolution(200, 200);
+
+        $imagick->readImage($fileBack);
+
+        $num_pages_pdf = $imagick->getNumberImages();
+
+        $pathOut = 'storage/images/png/' . $user_id . '/';
+        $nameOut = "page";
+
+        $fileout = public_path($pathOut . $nameOut . '.png');
+        $imagick->writeImages($fileout, true);
+
+        $npages = $imagick->getNumberImages();
+        if($npages > 1)
+        {
+            for ($x = 0; $x < $npages; $x++ )
+            {
+                $pages[$x] = public_path($pathOut . $nameOut . '-' . $x . '.png');
+            }
+        } else {
+            $pages[0] = public_path($pathOut . $nameOut . '.png');
+        }
+
+        $fileback = [
+            'filename' => $originalName,
+            'pages' => $pages,
+            'num_pages_pdf' => $num_pages_pdf
+        ];
+
+        return $fileback;
+    }
+
     public function pathGuide()
     {
         return storage_path('app/public/images/guide/');
+    }
+
+    public function pathPng($user_id)
+    {
+        return storage_path( 'app/public/images/png/') . $user_id . '/';
     }
 
     public function pathView($user_id)
@@ -90,7 +148,6 @@ trait Imagenes
         return $file_out;
     
     }
-
 
     public function resizeImage($filepath, $porc)
     {
@@ -242,5 +299,59 @@ trait Imagenes
             return false;
         }
     }
-    
+
+    public function cleanPath($path, $extension)
+    {
+        $ext = "*." . $extension;
+        if(!file_exists($path)){
+            mkdir($path);
+            chmod($path, 0755);
+        }else{
+            array_map('unlink', glob($path . $ext));
+        }
+
+    }
+
+
+    /**** WITHOUT USING *****/
+    public function pngTransparent($user_id, $file, $filename)
+    {
+        $path = $this->pathPng($user_id);
+        if(!file_exists($path)){
+            mkdir($path);
+            chmod($path, 0755);
+        }else{
+            array_map('unlink', glob($path . "*.png"));
+        }
+        
+        $archivo = $file->store('images/png/' . $user_id, 'local');
+        // $archivo = $file->store('images/png/' . $user_id, 'local');
+
+        $archivo = $path . basename($archivo);
+
+        # create new ImageMagick object
+        $im = new Imagick($archivo);
+        # remove extra white space
+        // $im->clipImage(0);
+        $im->setImageFormat('png');
+
+        $color = "rgb(255,255,255)";
+        $alpha = 0.0;
+        $fuzz = 0;
+        $im->transparentPaintImage($color, $alpha, $fuzz * \Imagick::getQuantum(), false);
+
+        $im->despeckleimage();
+        header('Content-Type: image/png');
+
+        $namefile = basename($filename, ".png");
+        $namefile = str_replace(' ', '_', $namefile);
+        $namefile = str_replace(',', '', $namefile);
+
+        $file_out = $path . $namefile . '_transp.png';
+
+        $response = $im->writeImage($file_out);
+
+        return $response;
+
+    }    
 }

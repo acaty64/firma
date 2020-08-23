@@ -57,3 +57,14 @@ Route::get('/access/destroy/{id}', [
     'as' => 'access.destroy',
     'uses' => 'AccessController@destroy'
 ]);
+
+Route::get('/certificate', [
+    'as' => 'certificate',
+    'uses' => 'CertificateController@index'
+]);
+
+Route::post('/certificate/merge', [
+    'as' => 'merge',
+    'uses' => 'CertificateController@merge'
+]);
+

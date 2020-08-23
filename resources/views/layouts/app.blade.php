@@ -33,7 +33,8 @@
           {{-- Left Side Of Navbar --}}
             @if(Auth::user()->id == 1)
               <a href="{{ route('access.index') }}" class="btn btn-primary mr-2" role="button">Accesos</a>
-              <a href="{{ route('sign') }}" class="btn btn-primary" role="button">Firmas</a>
+              <a href="{{ route('sign') }}" class="btn btn-primary mr-2" role="button">Firmas</a>
+              <a href="{{ route('certificate') }}" class="btn btn-primary mr-2" role="button">Certificados</a>
             @endif
           </ul>
         </div>
