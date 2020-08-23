@@ -10,14 +10,20 @@
                 <div class="card-body">
                     <form action="{{ route('merge') }}" method="POST" enctype="multipart/form-data" accept-charset="UTF-8" >
                         @csrf
-                        <input type="hidden" value="{{ $user_id }}" name="user_id">
-                        Sube el archivo de certificado:
-                        <input type="file" name="archivo" id="archivo">
+                        <div class="row">
+                            <input type="hidden" value="{{ $user_id }}" name="user_id">
+                            Seleccione el archivo de certificado:
+                            <input type="file" name="archivo" id="archivo" class="btn btn-success ml-3" required accept="application/pdf">
+                        </div>
                         <br>
-                        Sube el archivo de fotografia:
-                        <input type="file" name="photo" id="photo">
+                        <div class="row">
+                            Seleccione el archivo de fotografia:
+                            <input type="file" name="photo" id="photo" class="btn btn-success ml-4" required accept="image/jpeg">
+                        </div>
                         <br>
-                        <button type="submit" class="btn-primary">Submit</button>
+                        <div class="row">
+                            <button type="submit" class="btn btn-primary">Procesar</button>
+                        </div>
                     </form>
                 </div>
 
