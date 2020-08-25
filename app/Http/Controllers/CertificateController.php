@@ -26,7 +26,7 @@ class CertificateController extends Controller
     	$response = $this->pdf2png($user_id, $file);
 
     	$seccion = 5;
-    	$posX = 50;
+    	$posX = 48;
     	$posY = 50;
 
         $path = $this->pathWork($user_id);
@@ -34,17 +34,17 @@ class CertificateController extends Controller
 
     	foreach ($response['pages'] as $key => $value) {
 	    	$file_in = [
-	    		'filepath' => $this->pathGuide() . 'certificado.jpg',
+	    		'filepath' => $this->pathGuide() . 'CERTIFICADO_fondo3507.jpg',
 	    	];
 	    	$file_sign = [
 	    		'filepath' => $value,
+                'porc_sign' => 98
 	    	];
 	    	$file_out = [
 	    		'filepath' => $this->pathWork($user_id) . basename($value, '.png') . '.jpg',
 	    	];
     		$this->addStamp($file_in, $file_sign, $seccion, $posX, $posY, $file_out);
     	}
-
 
     	$photo_file = $request->file('photo');
     	$imagick = new Imagick();
@@ -69,6 +69,7 @@ class CertificateController extends Controller
 	    	];
 	    	$file_sign = [
 	    		'filepath' => $this->pathWork($user_id) . $nameOut . '.png',
+                'porc_sign' => 130
 	    	];
 	    	$file_out = [
 	    		'filepath' => $this->pathWork($user_id) . basename($value, '.png') . '.jpg',
@@ -79,7 +80,9 @@ class CertificateController extends Controller
     		$resp_add = $this->addStamp($file_in, $file_sign, $seccion, $posX, $posY, $file_out);
     	}
 
-    	$resp = $this->jpgToPdf($files, $oldfilename, $user_id);
+
+        $resp = $this->jpgToPdf($files, $oldfilename, $user_id);
+    	// $resp = $this->jpgToPdf($files, $oldfilename, $user_id);
 
 // dd('CertificateController@merge', $resp);
 

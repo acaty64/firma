@@ -1,11 +1,11 @@
 *
-!png/
 !back/
 !guide/
-!out/
 !original/
+!out/
+!pdf/
+!png/
 !view/
 !work/
 !test/
-!pdf/
 !.gitignore

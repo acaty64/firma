@@ -9,6 +9,99 @@ use \Imagick;
 trait Imagenes
 {
 
+    public function jpg2a4($user_id, $file_in)
+    {
+        $originalName = $file_in->getClientOriginalName();
+
+        $namefile = basename($originalName, ".jpg");
+        $namefile = str_replace(' ', '', $namefile);
+        $namefile = str_replace('-', '_', $namefile);
+        $namefile = str_replace('(', '_', $namefile);
+        $namefile = str_replace(')', '_', $namefile);
+        $namefile = str_replace(',', '', $namefile);
+
+        $nameOut = $namefile . "_new";
+
+        $pathOut = '/storage/images/out/' . $user_id . '/';
+        $fileout = public_path($pathOut . $nameOut . '.jpg');
+        
+        // $response = $thumb->writeImages($fileout, true);
+
+        $filepath = $pathOut . $nameOut . '.jpg';
+
+        $this->cleanPath($this->pathWork($user_id), 'jpg');
+        $this->cleanPath($this->pathWork($user_id), 'jpeg');
+
+        $file_in->store('images/work/' . $user_id, 'local');
+
+        $file = $this->pathWork($user_id) . $file_in->hashName();
+        $sourcefile = $file;
+
+        $imagen = imagecreatefromjpeg($file);
+        $ancho = imagesx($imagen);
+        $alto = imagesy($imagen);
+
+        // A4 = 210mm x 297mm => (300ppi) 2480px x 3508px
+        $nuevo_ancho = 2480;
+        $nuevo_alto = 3508 - 1;
+
+        // Cargar
+        $thumb = imagecreatetruecolor($nuevo_ancho, $nuevo_alto);
+
+        $origen = imagecreatefromjpeg($file_in);
+
+        header('Content-Type: image/jpg');
+        imagealphablending($thumb, false);
+        imagesavealpha($thumb, true);
+        
+        // Cambiar el tamaño
+        imagecopyresized($thumb, $origen, 0, 0, 0, 0, $nuevo_ancho, $nuevo_alto, $ancho, $alto);
+
+
+        $targetfile = $this->pathOut($user_id) . $nameOut . '.jpg';
+        imagejpeg($thumb, $targetfile);
+
+        return [
+            'success' => true,
+            'filepath' => $pathOut . basename($targetfile),
+        ];
+
+    }
+
+    public function pdf2jpg($user_id, $file)
+    {
+        // $pathOut = $this->pathOut($user_id);
+        $originalName = $file->getClientOriginalName();
+
+        $imagick = new Imagick();
+        $imagick->setResolution(200, 200);
+
+        $imagick->readImage($file);
+
+        $namefile = basename($originalName, ".pdf");
+        $namefile = str_replace(' ', '', $namefile);
+        $namefile = str_replace('-', '_', $namefile);
+        $namefile = str_replace('(', '_', $namefile);
+        $namefile = str_replace(')', '_', $namefile);
+        $namefile = str_replace(',', '', $namefile);
+
+        $nameOut = $namefile . "_new";
+
+        $pathOut = '/storage/images/out/' . $user_id . '/';
+        $fileout = public_path($pathOut . $nameOut . '.jpg');
+        
+        $response = $imagick->writeImages($fileout, true);
+
+        $filepath = $this->pathOut($user_id) . $nameOut . '.jpg';
+        $filepath = $pathOut . $nameOut . '.jpg';
+
+        return [
+            'success' => true,
+            'filepath' => $filepath
+        ];
+
+    }
+
     public function pdf2png($user_id, $file)
     {
         $user_id = $user_id;
@@ -29,7 +122,7 @@ trait Imagenes
         }
         $imagick = new Imagick();
 
-        $imagick->setResolution(200, 200);
+        $imagick->setResolution(300, 300);
 
         $imagick->readImage($fileBack);
 

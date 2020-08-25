@@ -68,3 +68,18 @@ Route::post('/certificate/merge', [
     'uses' => 'CertificateController@merge'
 ]);
 
+Route::get('/tools', [
+    'as' => 'tools',
+    'uses' => 'ToolsController@index'
+]);
+
+Route::post('/tools/pdf2jpg', [
+    'as' => 'pdf2jpg',
+    'uses' => 'ToolsController@_pdf2jpg'
+]);
+
+Route::post('/tools/resizejpg', [
+    'as' => 'resizejpg',
+    'uses' => 'ToolsController@_resizejpg'
+]);
+

@@ -18,7 +18,7 @@
         padding: 0;
     }
     @page {
-        size: 21cm 29.9cm;
+        size: 21cm 29.7cm;
         margin: 0;
     }
     page-break-after:always;
