@@ -12,34 +12,34 @@ class GuideController extends Controller
 
 	public function sign(Request $request)
 	{
-        $user_id = $request->user_id;
+    $user_id = $request->user_id;
 
 		try {
       $fileSign = $request->file_sign->store('images/view/' . $user_id, 'local');
-      $file_in = $this->pathView($user_id) . basename($fileSign);
+      $file_in = $this->imagePath('view', $user_id) . basename($fileSign);
 
-      $path = $this->pathOriginal($user_id);
+      $path = $this->imagePath('original', $user_id);
       if(!file_exists($path)){
           mkdir($path);
       }else{
           array_map('unlink', glob($path . "*.png"));
       }
 
-      $file_out = $this->pathOriginal($user_id) . basename($fileSign);
+      $file_out = $this->imagePath('original', $user_id) . basename($fileSign);
       copy($file_in, $file_out);
 
       if(!file_exists($file_out)){
           return ['success'=> false, 'mess' => 'No se creo el archivo ' . $file_out];
       }
 
-      $path = $this->pathWork($user_id);
+      $path = $this->imagePath('work', $user_id);
       if(!file_exists($path)){
           mkdir($path);
       }else{
           array_map('unlink', glob($path . "*.png"));
       }
 
-      $file_out = $this->pathWork($user_id) . basename($fileSign);
+      $file_out = $this->imagePath('work', $user_id) . basename($fileSign);
 
       copy($file_in, $file_out);
       chmod($file_out, 0755);
@@ -49,14 +49,14 @@ class GuideController extends Controller
       }
 
 		} catch (Exception $e) {
-            return false;			
+            return false;
 		}
-        
+
 		$filename = basename($fileSign);
 
-    	$file_sign = [ 
-    			'filepath' => $this->pathView($user_id) . $filename,
-                'filework' => $this->pathWork($user_id) . $filename,
+    	$file_sign = [
+    			'filepath' => $this->imagePath('view', $user_id) . $filename,
+                'filework' => $this->imagePath('work', $user_id) . $filename,
     			'filename' => $filename,
     			'path' => 'images/view/' . $user_id . '/',
     		];
@@ -70,8 +70,8 @@ class GuideController extends Controller
         $wstamp = imagesx($stamp);
         $hstamp = imagesy($stamp);
 
-        $porc = 100/$wstamp; 
-        $porc = 0.3; 
+        $porc = 100/$wstamp;
+        $porc = 0.3;
 
         $stamp = $this->resizeImage($file_sign['filepath'], $porc);
         $this->saveFromImage($stamp, $file_sign['filepath']);
@@ -85,7 +85,7 @@ class GuideController extends Controller
 
         if($request->filefirma == 'sign_guide.png'){
 
-            $path = $this->pathView($user_id);
+            $path = $this->imagePath('view', $user_id);
             if(!file_exists($path)){
                 mkdir($path);
                 chmod($path, 0755);
@@ -93,16 +93,7 @@ class GuideController extends Controller
                 array_map('unlink', glob($path . "*.png"));
             }
 
-            $path = $this->pathBack($user_id);
-            if(!file_exists($path)){
-                mkdir($path);
-                chmod($path, 0755);
-            }else{
-                array_map('unlink', glob($path . "*.png"));
-                array_map('unlink', glob($path . "*.jpg"));
-            }
-
-            $path = $this->pathWork($user_id);
+            $path = $this->imagePath("back", $user_id);
             if(!file_exists($path)){
                 mkdir($path);
                 chmod($path, 0755);
@@ -111,7 +102,16 @@ class GuideController extends Controller
                 array_map('unlink', glob($path . "*.jpg"));
             }
 
-            $path = $this->pathOriginal($user_id);
+            $path = $this->imagePath('work', $user_id);
+            if(!file_exists($path)){
+                mkdir($path);
+                chmod($path, 0755);
+            }else{
+                array_map('unlink', glob($path . "*.png"));
+                array_map('unlink', glob($path . "*.jpg"));
+            }
+
+            $path = $this->imagePath('original', $user_id);
             if(!file_exists($path)){
                 mkdir($path);
                 chmod($path, 0755);
@@ -120,7 +120,7 @@ class GuideController extends Controller
                 array_map('unlink', glob($path . "*.pdf"));
             }
 
-            $path = $this->pathOut($user_id);
+            $path = $this->imagePath('out', $user_id);
             if(!file_exists($path)){
                 mkdir($path);
                 chmod($path, 0755);
@@ -131,7 +131,7 @@ class GuideController extends Controller
     	$filename = $request->filename;
     	$filename = str_replace('"', '', $filename);
     	$path = 'images/guide/';
-    	$file_in = [ 
+    	$file_in = [
     			'filepath' => public_path('storage/') . $path . $filename,
     			'filename' => $filename,
     			'path' => $path,
@@ -139,7 +139,7 @@ class GuideController extends Controller
     	if(!file_exists($file_in['filepath']))
     	{
     		return [
-    			'success'=> false, 
+    			'success'=> false,
     			'mess'=> $file_in['filepath'] . ' file not found',
     		];
     	}
@@ -151,11 +151,11 @@ class GuideController extends Controller
     		$path = 'images/guide/';
             $filepath = public_path('storage/') . $path . $filename;
     	} else {
-            $filepath = $this->pathView($user_id) . $filename;
+            $filepath = $this->imagePath('view', $user_id) . $filename;
     		$path = 'images/view/' . $user_id . '/';
     	}
 
-    	$file_stamp = [ 
+    	$file_stamp = [
     			'filepath' => $filepath,
     			'filename' => $filename,
     			'path' => $path,
@@ -163,7 +163,7 @@ class GuideController extends Controller
     	if(!file_exists($file_stamp['filepath']))
     	{
     		return [
-    			'success'=> false, 
+    			'success'=> false,
     			'mess'=> $file_stamp['filepath'] . ' file not found',
     		];
     	}
@@ -171,7 +171,7 @@ class GuideController extends Controller
     	$filename = $request->fileout;
     	$filename = str_replace('"', '', $filename);
     	$path = 'images/view/' . $user_id . '/';
-    	$file_out = [ 
+    	$file_out = [
     			'filepath' => public_path('storage/') . $path . $filename,
     			'filename' => $filename,
     			'path' => $path,

@@ -166,6 +166,7 @@ return [
          * Package Service Providers...
          */
         Barryvdh\DomPDF\ServiceProvider::class,
+        LynX39\LaraPdfMerger\PdfMergerServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -190,6 +191,7 @@ return [
     */
 
     'aliases' => [
+        'PdfMerger' => LynX39\LaraPdfMerger\Facades\PdfMerger::class,
         'PDF' => Barryvdh\DomPDF\ServiceProvider::class,
         'App' => Illuminate\Support\Facades\App::class,
         'Arr' => Illuminate\Support\Arr::class,

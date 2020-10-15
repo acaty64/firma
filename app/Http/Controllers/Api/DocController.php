@@ -25,48 +25,47 @@ class DocController extends Controller
 		$range_page = $request->range_page;
 		$porc_sign = $request->porc_sign;
 
-		$file_stamp['filepath'] = $this->pathView($user_id) . basename($file_stamp['filepath']);
+		$file_stamp['filepath'] = $this->imagePath("view", $user_id) . basename($file_stamp['filepath']);
 
-  	if(!file_exists($file_stamp['filepath']))
-  	{
-  		return [
-  			'success'=> false, 
-  			'mess'=> $file_stamp['filepath'] . ' file_stamp not found',
-  		];
-  	}
+		if(!file_exists($file_stamp['filepath']))
+		{
+			return [
+				'success'=> false,
+				'mess'=> $file_stamp['filepath'] . ' file_stamp not found',
+			];
+		}
 
-    $path = $this->pathWork($user_id);
-    if(!file_exists($path)){
-        mkdir($path);
-    }else{
-        array_map('unlink', glob($path . "*.jpg"));
-    }
+		$path = $this->imagePath("work", $user_id);
+		if(!file_exists($path)){
+			mkdir($path);
+		}else{
+			array_map('unlink', glob($path . "*.jpg"));
+		}
+		$filework = [];
+		foreach ( $files as $key => $file ){
+			if(!file_exists($file))
+			{
+				return [
+					'success'=> false,
+					'mess'=> $file . ' filepath not found',
+				];
+			}
 
-  	$filework = [];
-  	foreach ( $files as $key => $file ){
-    	if(!file_exists($file))
-    	{
-    		return [
-    			'success'=> false, 
-    			'mess'=> $file . ' filepath not found',
-    		];
-  		}
+			$path = 'images/work/' . $user_id . '/';
+			$file_out = [ 
+				'filepath' => $this->imagePath("work", $user_id) . basename($file, ".jpg") . '.jpg',
+				'filename' => basename($file, ".jpg") . '.jpg',
+				'path' => $path,
+			];
+			array_push($filework, $file_out);
 
-    	$path = 'images/work/' . $user_id . '/';
-    	$file_out = [ 
-    			'filepath' => $this->pathWork($user_id) . basename($file, ".jpg") . '.jpg',
-    			'filename' => basename($file, ".jpg") . '.jpg',
-    			'path' => $path,
-    		];
-    	array_push($filework, $file_out);
+			$back_file = $file;
+			$work_file = $file_out['filepath'];
 
-      $back_file = $file;
-      $work_file = $file_out['filepath'];
+			copy($back_file, $work_file);
+			chmod($work_file, 0755);
 
-      copy($back_file, $work_file);
-      chmod($work_file, 0755);
-
-  	}
+		}
 
 		$nhojas = [];
 		if ($hojas == "rango"){
@@ -75,7 +74,7 @@ class DocController extends Controller
 				if ( strpos($value, '-') > 0 ){
 					$start = substr($value, 0, strpos($value, '-'));
 					$end = substr($value, strpos($value, '-')+1, strlen($value)-strpos($value, '-')-1);
-					for ($i = $start; $i <= $end; $i++) { 
+					for ($i = $start; $i <= $end; $i++) {
 						array_push($nhojas, $i);
 					}
 				}else{
@@ -97,11 +96,11 @@ class DocController extends Controller
 		}
 
 		/// Resize
-    $original_sign = $this->pathOriginal($user_id) . basename($file_stamp['filepath']);
+		$original_sign = $this->imagePath("original", $user_id) . basename($file_stamp['filepath']);
 
-    $back_sign = $this->pathBack($user_id) . basename($file_stamp['filepath']);
+		$back_sign = $this->imagePath("back", $user_id) . basename($file_stamp['filepath']);
 
-    copy($original_sign, $back_sign);
+		copy($original_sign, $back_sign);
 
 		$back_sign = [
 			'filepath' => $back_sign,
@@ -111,12 +110,12 @@ class DocController extends Controller
 		$path = 'images/back/' . $user_id . '/';
 		foreach ($nhojas as $value) {
 			$file_hoja = $files[$value-1];
-	    	$file_in = [ 
-	    			'filepath' => $file_hoja,
-	    			'filename' => basename($file_hoja),
-	    			'path' => $path,
-	    		];
-	    	$file_out = $filework[$value-1];
+			$file_in = [ 
+				'filepath' => $file_hoja,
+				'filename' => basename($file_hoja),
+				'path' => $path,
+			];
+			$file_out = $filework[$value-1];
 
 			$this->addStamp($file_in, $back_sign, $seccion, $posX, $posY, $file_out);
 		}
@@ -154,26 +153,26 @@ class DocController extends Controller
 	{
 		$user_id = $request->user_id;
 
-		$path = $this->pathBack($user_id);
-        if(!file_exists($path)){
-            mkdir($path);
-        }else{
-            array_map('unlink', glob($path . "*.jpg"));
-        }
+		$path = $this->imagePath("back", $user_id);
+		if(!file_exists($path)){
+			mkdir($path);
+		}else{
+			array_map('unlink', glob($path . "*.jpg"));
+		}
 
-		$path = $this->pathBack($user_id);
-        if(!file_exists($path)){
-            mkdir($path);
-            chmod($path, 0755);
-        }else{
-            array_map('unlink', glob($path . "*.pdf"));
-        }
+		$path = $this->imagePath("back", $user_id);
+		if(!file_exists($path)){
+			mkdir($path);
+			chmod($path, 0755);
+		}else{
+			array_map('unlink', glob($path . "*.pdf"));
+		}
 
 		$originalName = $_FILES['file_back']['name'];
 		try {
 			$fileBack = $request->file_back->store('images/back/' . $user_id, 'local');
-			$fileBack = $this->pathBack($user_id) . basename($fileBack);
-      chmod($fileBack, 0755);
+			$fileBack = $this->imagePath("back", $user_id) . basename($fileBack);
+			chmod($fileBack, 0755);
 		} catch (Exception $e) {
 			return ['success'=>false, 'mess'=>'no se grabo archivo ' . $request->file_back->getClientOriginalName,];
 		}

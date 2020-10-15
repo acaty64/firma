@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Access extends Model
 {
 	protected $table = 'accesses';
-	
+
     protected $fillable = [
         'user_id',
     ];
@@ -15,6 +15,6 @@ class Access extends Model
 	public function getUserAttribute()
 	{
 		return User::findOrFail($this->user_id);
-	}    
+	}
 
 }

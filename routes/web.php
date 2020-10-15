@@ -25,21 +25,25 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-Route::get('/autologin/{id}/{api_token}', [
-	'as' => 'autologin',
-	'uses' => 'LoginController@autologin'
-]);
+if(env('APP_DEBUG')){
+    Auth::routes();
+}else{
 
-Route::get('login', [
-	'as' => 'login',
-	'uses' => 'LoginController@login'
-]);
+    Route::get('/autologin/{id}/{api_token}', [
+    	'as' => 'autologin',
+    	'uses' => 'LoginController@autologin'
+    ]);
 
-Route::post('/logout', [
-	'as' => 'logout',
-	'uses' => 'Auth\LoginController@logout'
-]);
-// Auth::routes();
+    Route::get('login', [
+    	'as' => 'login',
+    	'uses' => 'LoginController@login'
+    ]);
+
+    Route::post('/logout', [
+    	'as' => 'logout',
+    	'uses' => 'Auth\LoginController@logout'
+    ]);
+}
 
 Route::get('/home', 'HomeController@index')->name('home');
 

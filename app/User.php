@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use Notifiable;
-    
+
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);

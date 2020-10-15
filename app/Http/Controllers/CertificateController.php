@@ -29,7 +29,7 @@ class CertificateController extends Controller
     	$posX = 48;
     	$posY = 50;
 
-        $path = $this->pathWork($user_id);
+        $path = $this->imagePath("work", $user_id);
         $this->cleanPath($path, 'png');
 
     	foreach ($response['pages'] as $key => $value) {
@@ -41,7 +41,7 @@ class CertificateController extends Controller
                 'porc_sign' => 98
 	    	];
 	    	$file_out = [
-	    		'filepath' => $this->pathWork($user_id) . basename($value, '.png') . '.jpg',
+	    		'filepath' => $this->imagePath("work", $user_id) . basename($value, '.png') . '.jpg',
 	    	];
     		$this->addStamp($file_in, $file_sign, $seccion, $posX, $posY, $file_out);
     	}
@@ -65,14 +65,14 @@ class CertificateController extends Controller
     	$files = [];
     	foreach ($response['pages'] as $key => $value) {
 	    	$file_in = [
-	    		'filepath' => $this->pathWork($user_id) . basename($value, '.png') . '.jpg',
+	    		'filepath' => $this->imagePath("work", $user_id) . basename($value, '.png') . '.jpg',
 	    	];
 	    	$file_sign = [
-	    		'filepath' => $this->pathWork($user_id) . $nameOut . '.png',
+	    		'filepath' => $this->imagePath("work", $user_id) . $nameOut . '.png',
                 'porc_sign' => 130
 	    	];
 	    	$file_out = [
-	    		'filepath' => $this->pathWork($user_id) . basename($value, '.png') . '.jpg',
+	    		'filepath' => $this->imagePath("work", $user_id) . basename($value, '.png') . '.jpg',
 	    	];
 	    	$files[] = [
 	    			'filename' => basename($value, '.png') . '.jpg'

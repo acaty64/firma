@@ -21,7 +21,7 @@ class ToolsController extends Controller
     	$user_id = $request->user_id;
     	$file = $request->file('archivo');
     	$response = $this->pdf2jpg($user_id, $file);
-    	$filepath = $this->pathOut($user_id) . basename($response['filepath']);
+    	$filepath = $this->imagePath("out", $user_id) . basename($response['filepath']);
 		return view('app.tools.downloadJpg')->with(
 			[
 				'file' => $response['filepath'],
@@ -35,7 +35,7 @@ class ToolsController extends Controller
     	$user_id = $request->user_id;
     	$file = $request->file('file_jpg');
     	$response = $this->jpg2a4($user_id, $file);
-    	$filepath = $this->pathOut($user_id) . basename($response['filepath']);
+    	$filepath = $this->imagePath("out", $user_id) . basename($response['filepath']);
 		return view('app.tools.downloadJpg')->with(
 			[
 				'file' => $response['filepath'],

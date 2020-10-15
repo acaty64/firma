@@ -39,8 +39,8 @@ class LoginTest extends TestCase
     	]);
         $this->actingAs($user);
         $response = $this->get('login')
-        			->assertStatus(200)
-        			->assertViewIs('app.unlogued');
+        			->assertStatus(302)
+        			->assertRedirect();
     }
 
     /** @test */
