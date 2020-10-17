@@ -151,8 +151,8 @@ class DocController extends Controller
 
 	public function saveBack(Request $request)
 	{
-		$user_id = $request->user_id;
 
+		$user_id = $request->user_id;
 		$path = $this->imagePath("back", $user_id);
 		if(!file_exists($path)){
 			mkdir($path);
@@ -168,7 +168,7 @@ class DocController extends Controller
 			array_map('unlink', glob($path . "*.pdf"));
 		}
 
-		$originalName = $_FILES['file_back']['name'];
+		$originalName = $request->file_back->getClientOriginalName();
 		try {
 			$fileBack = $request->file_back->store('images/back/' . $user_id, 'local');
 			$fileBack = $this->imagePath("back", $user_id) . basename($fileBack);
@@ -187,7 +187,7 @@ class DocController extends Controller
 		// Writes an image
 		$pathOut = 'storage/images/back/' . $user_id . '/';
 		$nameOut = "page";
-		// $fileout = public_path($pathOut . $nameOut . '.png');
+
 		$fileout = public_path($pathOut . $nameOut . '.jpg');
 		$imagick->writeImages($fileout, true);
 
