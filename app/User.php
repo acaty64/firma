@@ -15,7 +15,7 @@ class User extends Authenticatable
     {
         parent::__construct($attributes);
         // $this->connection = 'mysql_user';
-        $this->connection = config('app.env') === 'testing' ? 'mysql_tests' : 'mysql_user';
+        $this->connection = env('APP_ENV') === 'testing' ? 'mysql_tests' : 'mysql_user';
     }
 
     /**

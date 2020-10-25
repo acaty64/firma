@@ -4,17 +4,6 @@ use Barryvdh\DomPDF\PDF;
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 
 Route::get('/sign', [
 	'as' => 'sign',
@@ -87,3 +76,16 @@ Route::post('/tools/resizejpg', [
     'uses' => 'ToolsController@_resizejpg'
 ]);
 
+Route::get('/checkPHP', function()
+{
+    return view('checkPHP');
+});
+
+Route::get('/checkPDF', function()
+{
+    $user_id = "x";
+
+    $file = 'storage/images/guide/certificado.jpg';
+
+    return view('pdf.pdfoutfile', ['file'=>$file]);
+});

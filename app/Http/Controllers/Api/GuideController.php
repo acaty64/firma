@@ -39,16 +39,14 @@ class GuideController extends Controller
       }
 
       $file_out = $this->imagePath('work', $user_id) . basename($fileSign);
-
       copy($file_in, $file_out);
       chmod($file_out, 0755);
 
-      if(!file_exists($file_out)){
-        return ['success'=> false, 'mess' => 'No se creo el archivo ' . $file_out];
-      }
-
     } catch (Exception $e) {
       return false;
+    }
+    if(!file_exists($file_out)){
+      return ['success'=> false, 'mess' => 'No se creo el archivo ' . $file_out];
     }
 
     $filename = basename($fileSign);
@@ -73,6 +71,7 @@ class GuideController extends Controller
     $porc = 0.3;
 
     $stamp = $this->resizeImage($file_sign['filepath'], $porc);
+
     $this->saveFromImage($stamp, $file_sign['filepath']);
 
     return $file_sign;

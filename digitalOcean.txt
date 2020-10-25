@@ -2,6 +2,10 @@ digitalOcean.txt
 Trait/Imagenes
 jpgToOnePdf
 +            sleep(1);
-+            
++
 +            $pdf = \PDF::loadView('pdf.pdfoutfile', ['file'=>$file]);
 +            $pdf->save(storage_path($file_out));
+
+
+
+phpunit --stop-on-failure --stderr

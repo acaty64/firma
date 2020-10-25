@@ -6,11 +6,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
-class GuideSignTest extends TestCase
+class A01ApiGuideSignTest extends TestCase
 {
     /** @test */
-    public function ApiGuideSignTest()
+    public function A01ApiGuideSignTest()
     {
+        // $this->markTestIncomplete('Revisar Snappy');
+
         $local_file = storage_path('app/public/images/test/fake_firma.png');
 
         $uploadedFile = new UploadedFile(

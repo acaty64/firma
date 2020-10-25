@@ -7,11 +7,13 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-class ApiGetPreviewTest extends TestCase
+class A07ApiGetPreviewTest extends TestCase
 {
     /** @test */
-    public function ApiGetPreviewTest()
+    public function A07ApiGetPreviewTest()
     {
+        // $this->markTestIncomplete('Revisar Snappy');
+
         $fake_png = storage_path() . '/app/public/images/test/fake_firma.png';
         $fake_original = storage_path() . '/app/public/images/original/x/fake_firma.png';
         $fake_work = storage_path() . '/app/public/images/work/x/fake_firma.png';
@@ -44,12 +46,15 @@ class ApiGetPreviewTest extends TestCase
         ];
 
         $response = $this->post('/api/doc/preview',$request);
-
         $response->assertStatus(200)
                 ->assertJsonFragment([
                         'filepath'  => '/storage/images/out/x/PAPEL_MEMBRETADO_3_firmado.pdf'
                     ]);
         $newFile = storage_path() . '/app/public/images/out/x/' . $response['filename'];
+
         $this->assertTrue(file_exists($newFile));
+
+        $this->MarkTestIncomplete('test only file, check image ' . $newFile);
+
     }
 }

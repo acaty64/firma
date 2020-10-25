@@ -31,7 +31,7 @@
 								</div>
 								<div class="row">
 									<div class="col-md-6">
-										Horizontal (%): 
+										Horizontal (%):
 									</div>
 									<div class="col-md-6">
 										<input v-model="horizontal" type="number" name="horizontal" min="0" max="100" size="3" step="10">
@@ -40,7 +40,7 @@
 								<div class="row">
 									<div class="col-md-6">
 										Vertical (%):
-									</div> 
+									</div>
 									<div class="col-md-6">
 										<input v-model="vertical" type="number" name="vertical" min="0" max="100" size="3" step="10">
 									</div>
@@ -87,7 +87,7 @@
 								</span>
 							</div>
 							<div class="col-md-2">
-								% <br>	 
+								% <br>
 								<input v-model="porc_sign" type="number" name="porc_sign" min="0" max="200" size="3" step="10">
 							</div>
 							<div class="col-md-5">
@@ -161,9 +161,9 @@
 				'porc_sign' : 100,
 				'hojas' : 'ultima',
 				'options' : [
-					{ text: 'Ùltima', value: 'ultima' }, 
-					{ text: 'Todas', value: 'todas' }, 
-					{ text: 'Rango', value: 'rango' }, 
+					{ text: 'Ùltima', value: 'ultima' },
+					{ text: 'Todas', value: 'todas' },
+					{ text: 'Rango', value: 'rango' },
 				] ,
 				'range_page' : "",
 			}
@@ -242,7 +242,7 @@
 					user_id: this.user_id,
 					filefirma : {
 						path: 'images/back/',
-						filepath: this.filefirma,	
+						filepath: this.filefirma,
 					},
 					fileback : this.fileback,
 					seccion : this.seccion ,
@@ -357,7 +357,7 @@
 					{
 	        	this.filename = response.data.filebase['path'] + response.data.filebase['filename'] +"?" + Date.now();
 	        	return true;
-						console.log('getGuide filename: ', this.filename);						
+						console.log('getGuide filename: ', this.filename);
 					}
           console.log('error getGuide, success false: ', response.data);
           return false;

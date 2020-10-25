@@ -165,7 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
-        Barryvdh\DomPDF\ServiceProvider::class,
+        Barryvdh\Snappy\ServiceProvider::class,
         LynX39\LaraPdfMerger\PdfMergerServiceProvider::class,
 
         /*
@@ -191,8 +191,9 @@ return [
     */
 
     'aliases' => [
+        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'PdfMerger' => LynX39\LaraPdfMerger\Facades\PdfMerger::class,
-        'PDF' => Barryvdh\DomPDF\ServiceProvider::class,
         'App' => Illuminate\Support\Facades\App::class,
         'Arr' => Illuminate\Support\Arr::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,

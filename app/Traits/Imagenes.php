@@ -19,99 +19,6 @@ trait Imagenes
     }
   }
 
-  public function jpg2a4($user_id, $file_in)
-  {
-    $originalName = $file_in->getClientOriginalName();
-
-    $namefile = basename($originalName, ".jpg");
-    $namefile = str_replace(' ', '', $namefile);
-    $namefile = str_replace('-', '_', $namefile);
-    $namefile = str_replace('(', '_', $namefile);
-    $namefile = str_replace(')', '_', $namefile);
-    $namefile = str_replace(',', '', $namefile);
-
-    $nameOut = $namefile . "_new";
-
-    $pathOut = '/storage/images/out/' . $user_id . '/';
-    $fileout = public_path($pathOut . $nameOut . '.jpg');
-
-        // $response = $thumb->writeImages($fileout, true);
-
-    $filepath = $pathOut . $nameOut . '.jpg';
-
-    $this->cleanPath($this->imagePath("work", $user_id), 'jpg');
-    $this->cleanPath($this->imagePath("work", $user_id), 'jpeg');
-
-    $file_in->store('images/work/' . $user_id, 'local');
-
-    $file = $this->imagePath("work", $user_id) . $file_in->hashName();
-    $sourcefile = $file;
-
-    $imagen = imagecreatefromjpeg($file);
-    $ancho = imagesx($imagen);
-    $alto = imagesy($imagen);
-
-        // A4 = 210mm x 297mm => (300ppi) 2480px x 3508px
-    $nuevo_ancho = 2480;
-    $nuevo_alto = 3508 - 1;
-
-        // Cargar
-    $thumb = imagecreatetruecolor($nuevo_ancho, $nuevo_alto);
-
-    $origen = imagecreatefromjpeg($file_in);
-
-    header('Content-Type                                       : image/jpg');
-    imagealphablending($thumb, false);
-    imagesavealpha($thumb, true);
-
-        // Cambiar el tamaño
-    imagecopyresized($thumb, $origen, 0, 0, 0, 0, $nuevo_ancho, $nuevo_alto, $ancho, $alto);
-
-
-    $targetfile = $this->imagePath("out", $user_id) . $nameOut . '.jpg';
-    imagejpeg($thumb, $targetfile);
-
-    return [
-      'success' => true,
-      'filepath' => $pathOut . basename($targetfile),
-    ];
-
-  }
-
-  public function pdf2jpg($user_id, $file)
-  {
-        // $pathOut = $this->imagePath("out", $user_id);
-    $originalName = $file->getClientOriginalName();
-
-    $imagick = new Imagick();
-    $imagick->setResolution(200, 200);
-
-    $imagick->readImage($file);
-
-    $namefile = basename($originalName, ".pdf");
-    $namefile = str_replace(' ', '', $namefile);
-    $namefile = str_replace('-', '_', $namefile);
-    $namefile = str_replace('(', '_', $namefile);
-    $namefile = str_replace(')', '_', $namefile);
-    $namefile = str_replace(',', '', $namefile);
-
-    $nameOut = $namefile . "_new";
-
-    $pathOut = '/storage/images/out/' . $user_id . '/';
-    $fileout = public_path($pathOut . $nameOut . '.jpg');
-
-    $response = $imagick->writeImages($fileout, true);
-
-    $filepath = $this->imagePath("out", $user_id) . $nameOut . '.jpg';
-    $filepath = $pathOut . $nameOut . '.jpg';
-
-    return [
-      'success' => true,
-      'filepath' => $filepath
-    ];
-
-  }
-
   public function pdf2png($user_id, $file)
   {
     $user_id = $user_id;
@@ -119,20 +26,20 @@ trait Imagenes
     $path = $this->imagePath("png", $user_id);
     $this->cleanPath($path, 'png');
 
-    $path = $this->imagePath("png", $user_id);
+    $path = $this->imagePath("pdf", $user_id);
     $this->cleanPath($path, 'pdf');
 
     $originalName = $file->getClientOriginalName();
     try {
-      $fileBack = $file->store('images/png/' . $user_id, 'local');
-      $fileBack = $this->imagePath("png", $user_id) . basename($fileBack);
+      $fileBack = $file->store('images/pdf/' . $user_id, 'local');
+      $fileBack = $this->imagePath("pdf", $user_id) . basename($fileBack);
       chmod($fileBack, 0755);
     } catch (Exception $e) {
       return ['success'=>false, 'mess'=>'no se grabo archivo ' . $originalName,];
     }
-    $imagick = new Imagick();
+    $imagick = new \Imagick();
 
-    $imagick->setResolution(300, 300);
+    $imagick->setResolution(200, 200);
 
     $imagick->readImage($fileBack);
 
@@ -173,7 +80,6 @@ trait Imagenes
     if(!file_exists($file_in)){
       return false;
     }
-
     $img = $this->imageFromFile($file_in);
 
     $stamp = $this->imageFromFile($file_stamp);
@@ -181,6 +87,8 @@ trait Imagenes
     if(array_key_exists('porc_sign', $file_sign)){
       $stamp = $this->resizeImage($file_stamp, $file_sign['porc_sign']/100);
     }
+
+    // $stamp->getImageResolution(300,300);
 
     $wstamp = imagesx($stamp);
     $hstamp = imagesy($stamp);
@@ -207,9 +115,14 @@ trait Imagenes
     imagecopy($img, $stamp, $axisX, $axisY,
      0, 0, $wstamp, $hstamp);
 
-        //se copia la imagen
-    imagejpeg($img, $file_out['filepath'], 88);
-    return $file_out;
+    try {
+      //se copia la imagen
+      imageresolution($img, 200);
+      imagejpeg($img, $file_out['filepath'], 88);
+      return $file_out;
+    } catch (Exception $e) {
+      return ['success'=>false, 'mess'=>'no se genero archivo ' . $file_out['filepath'],];
+    }
 
   }
 
@@ -222,12 +135,12 @@ trait Imagenes
     $nuevo_ancho = $ancho * $porc;
     $nuevo_alto = $alto * $porc;
 
+    $origen = $this->imageFromFile($filepath);
+
         // Cargar
     $thumb = imagecreatetruecolor($nuevo_ancho, $nuevo_alto);
 
-    $origen = $this->imageFromFile($filepath);
-
-    // header('Content-Type: image/png');
+    header('Content-Type: image/png');
     imagealphablending($thumb, false);
     imagesavealpha($thumb, true);
 
@@ -241,16 +154,15 @@ trait Imagenes
   {
     $puntos=explode(".", $fileout);
     $extensionimagenorig=$puntos[count($puntos)-1];
-    if (preg_match("/jpg|jpeg|JPG|JPEG/", $extensionimagenorig)) 
+    if (preg_match("/jpg|jpeg|JPG|JPEG/", $extensionimagenorig))
     {
-      header('Content-Type                                   : image/jpeg');
+      header('Content-Type: image/jpeg');
       $imgm = imagejpeg($image, $fileout);
 
     }
-    if (preg_match("/png|PNG/", $extensionimagenorig)) 
+    if (preg_match("/png|PNG/", $extensionimagenorig))
     {
-      // header('Content-Type                                   : image/png');
-// dd('saveFromImage');
+      header('Content-Type: image/png');
       imagealphablending($image, false);
       imagesavealpha($image, true);
 
@@ -260,7 +172,7 @@ trait Imagenes
 
     }
     if (preg_match("/gif|GIF/", $extensionimagenorig)) {
-      header('Content-Type                                   : image/gif');
+      header('Content-Type: image/gif');
       $imgm = imagegif($image, $fileout);
     }
 
@@ -280,7 +192,7 @@ trait Imagenes
 
     if (preg_match("/jpg|jpeg|JPG|JPEG/", $extensionimagenorig))
     {
-      $imgm=imagecreatefromjpeg($file);
+      $imgm=@imagecreatefromjpeg($file);
 
     }
     if (preg_match("/png|PNG/", $extensionimagenorig))
@@ -321,25 +233,17 @@ trait Imagenes
     $namefile = explode(".", $namefile);
     $namefile = $namefile[0];
 
-    $files_pdf = [];
-    foreach ($files as $file) {
-      $file_storage = 'storage/images/work/' . $user_id . '/' . $file['filename'];
-      $check = $this->jpgToOnePdf($file_storage, $user_id);
-      if(!$check){
-        return ['success'=>false, 'message' => 'Error in jpgToPdf ' . $file_storage];
-      }
-      $files_pdf[] = $check['file_out'];
-    }
-
     $newfilename = $this->imagePath("out", $user_id) . $namefile . '_firmado.pdf';
 
-    $pdf = PdfMerger::init();
-    foreach ($files_pdf as $key => $file) {
-      $pdf->addPDF($file, 'all');
+    $files_jpg = [];
+    foreach ($files as $file) {
+      $files_jpg[] = $file['filepath'];
     }
-    $pdf->merge();
-    $pdf->save($newfilename, 'file');
-    chmod($newfilename, 0755);
+
+    $pdf = new \Imagick($files_jpg);
+
+    $pdf->setImageFormat('pdf');
+    $pdf->writeImages($newfilename, true);
 
     $newfile = '/storage/images/out/' . $user_id . '/' . $namefile . '_firmado.pdf';
     return [
@@ -349,34 +253,22 @@ trait Imagenes
     ];
   }
 
-  public function jpgToOnePdf($file, $user_id)
+  public function cleanPath($path, $extension)
   {
     try {
-      $filename = explode(".", basename($file));
-      $file_out = 'app/public/images/pdf/' . $user_id . '/' . $filename[0] . '.pdf';
-      $pdf = \PDF                                            ::loadView('pdf.pdfoutfile', ['file'=>$file])
-      ->save(storage_path($file_out));
-      $file_out = $this->imagePath("pdf", $user_id) . basename($file_out);
-      chmod($file_out, 0755);
-
-      return ['success' => true, 'file_out' => $file_out];
+      $ext = "*." . $extension;
+      if(!file_exists($path)){
+        mkdir($path);
+        chmod($path, 0755);
+      }else{
+        array_map('unlink', glob($path . $ext));
+      }
+      return true;
     } catch (Exception $e) {
       return false;
     }
-  }
-
-  public function cleanPath($path, $extension)
-  {
-    $ext = "*." . $extension;
-    if(!file_exists($path)){
-      mkdir($path);
-      chmod($path, 0755);
-    }else{
-      array_map('unlink', glob($path . $ext));
-    }
 
   }
-
 
   /**** WITHOUT USING *****/
   public function pngTransparent($user_id, $file, $filename)
@@ -406,7 +298,7 @@ trait Imagenes
     $im->transparentPaintImage($color, $alpha, $fuzz * \Imagick::getQuantum(), false);
 
     $im->despeckleimage();
-    header('Content-Type                                       : image/png');
+    header('Content-Type: image/png');
 
     $namefile = basename($filename, ".png");
     $namefile = str_replace(' ', '_', $namefile);

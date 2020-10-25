@@ -14,7 +14,6 @@ class DocController extends Controller
 
 	public function createNewPages(Request $request)
 	{
-
 		$user_id = $request->user_id;
 		$file_stamp = $request->filefirma;
 		$files = $request->fileback['pages'];
@@ -118,7 +117,7 @@ class DocController extends Controller
 			$file_out = $filework[$value-1];
 
 			$this->addStamp($file_in, $back_sign, $seccion, $posX, $posY, $file_out);
-		}
+ 		}
 
 		return [
 			'success' => true, 
@@ -136,7 +135,6 @@ class DocController extends Controller
 		$check = $this->createNewPages($request);
 
 		if($check['success']){
-
 			$filename = $check['fileback']['filename'];
 			$response = $this->jpgToPdf($check['fileback']['pages'], $filename, $user_id);
 

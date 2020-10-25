@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ApiGuideTest extends TestCase
+class A02ApiGuideTest extends TestCase
 {
     /** @test */
     public function ApiGuideTest()
