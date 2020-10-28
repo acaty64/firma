@@ -94,6 +94,11 @@ class A000TraitImagePathTest extends TestCase
         $path = $this->imagePath('work');
         $this->assertTrue(file_exists($path . '.gitignore'));
 
+        $path = $this->imagePath('transp', $user_id);
+        $this->cleanPath($path, 'png');
+        $path = $this->imagePath('transp');
+        $this->assertTrue(file_exists($path . '.gitignore'));
+
 
     }
 

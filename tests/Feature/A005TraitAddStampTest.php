@@ -8,12 +8,12 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-class A06TraitAddStampTest extends TestCase
+class A005TraitAddStampTest extends TestCase
 {
     use Imagenes;
 
     /** @test */
-    public function A06TraitAddStampTest()
+    public function A005TraitAddStampTest()
     {
 
         $file_test = $this->imagePath('test') . 'back/page-2.jpg';
@@ -55,6 +55,5 @@ class A06TraitAddStampTest extends TestCase
 
         $this->assertTrue($res_old == $res_new);
 
-        $this->MarkTestIncomplete('test only file, check image');
     }
 }

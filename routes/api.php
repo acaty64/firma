@@ -42,3 +42,19 @@ Route::post('/doc/preview', [
 	'as' => 'doc.preview',
 	'uses' => 'Api\DocController@preview'
 ]);
+
+Route::post('/ce/uploadPhoto', [
+	'as' => 'ce.uploadPhoto',
+	'uses' => 'Api\CEController@uploadPhoto'
+]);
+
+Route::post('/ce/uploadPDF', [
+	'as' => 'ce.uploadPDF',
+	'uses' => 'Api\CEController@uploadPDF'
+]);
+
+Route::post('/ce/preview', [
+	'as' => 'ce.preview',
+	'uses' => 'Api\CEController@preview'
+]);
+

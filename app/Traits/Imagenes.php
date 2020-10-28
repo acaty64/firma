@@ -19,10 +19,25 @@ trait Imagenes
     }
   }
 
+  public function jpg2png($user_id, $file)
+  {
+    try {
+      $fileout = $this->imagePath('png', $user_id) . basename($file, 'jpg') . 'png';
+      $imagick = new \Imagick($file);
+      $imagick->setResolution(200, 200);
+      $imagick->writeImages($fileout, true);
+
+      return $fileout;
+      // return $imagick;
+
+    } catch (Exception $e) {
+      return false;
+    }
+
+  }
+
   public function pdf2png($user_id, $file)
   {
-    $user_id = $user_id;
-
     $path = $this->imagePath("png", $user_id);
     $this->cleanPath($path, 'png');
 
@@ -62,15 +77,73 @@ trait Imagenes
       $pages[0] = public_path($pathOut . $nameOut . '.png');
     }
 
-    $fileback = [
+    $files_png = [
       'filename' => $originalName,
       'pages' => $pages,
       'num_pages_pdf' => $num_pages_pdf
     ];
 
-    return $fileback;
+    return $files_png;
   }
 
+
+  public function iAddStamp($file_in, $file_sign, $seccion, $posX, $posY, $file_out)
+  {
+    $file_in = $file_in['filepath'];
+    $file_stamp = $file_sign['filepath'];
+
+    if(!file_exists($file_in)){
+      return false;
+    }
+
+    $img = new \Imagick($file_in);
+
+    $stamp = new \Imagick($file_stamp);
+
+    if(array_key_exists('porc_sign', $file_sign)){
+      // $stamp = $this->resizeImage($file_stamp, $file_sign['porc_sign']/100);
+      $this->resizeImagick($file_stamp, $file_sign['porc_sign']/100, $file_stamp);
+      $stamp = new \Imagick($file_stamp);
+    }
+
+    // $stamp->getImageResolution(300,300);
+
+    $wstamp = $stamp->getImageWidth();
+    $hstamp = $stamp->getImageHeight();
+
+    $TaxisX = $img->getImageWidth();
+    $TaxisY = $img->getImageHeight();
+
+    $px = $TaxisX/3;
+    $py = $TaxisY/3;
+
+    $secciones = [
+      1 => [0 * $px, 0 * $py],
+      2 => [1 * $px, 0 * $py],
+      3 => [2 * $px, 0 * $py],
+      4 => [0 * $px, 1 * $py],
+      5 => [1 * $px, 1 * $py],
+      6 => [2 * $px, 1 * $py],
+      7 => [0 * $px, 2 * $py],
+      8 => [1 * $px, 2 * $py],
+      9 => [2 * $px, 2 * $py],
+    ];
+
+    $axisX = $secciones[$seccion][0] + (($posX/100)*($px - $wstamp));
+    $axisY = $secciones[$seccion][1] + (($posY/100)*($py - $hstamp));
+
+    try {
+      $img->compositeImage($stamp, Imagick::COMPOSITE_DEFAULT, $axisX, $axisY, Imagick::CHANNEL_ALPHA);
+      $img->writeImage($file_out['filepath']);
+
+      $img->destroy();
+
+      return $file_out;
+    } catch (Exception $e) {
+      return ['success'=>false, 'mess'=>'no se genero archivo ' . $file_out['filepath'],];
+    }
+
+  }
 
   public function addStamp($file_in, $file_sign, $seccion, $posX, $posY, $file_out)
   {
@@ -95,6 +168,7 @@ trait Imagenes
 
     $TaxisX = imagesx($img);
     $TaxisY = imagesy($img);
+
     $px = $TaxisX/3;
     $py = $TaxisY/3;
 
@@ -123,6 +197,23 @@ trait Imagenes
     } catch (Exception $e) {
       return ['success'=>false, 'mess'=>'no se genero archivo ' . $file_out['filepath'],];
     }
+
+  }
+
+  public function resizeImagick($filepath, $porc, $fileout)
+  {
+    $imagick = new \Imagick($filepath);
+
+    $new_width = $imagick->getImageWidth() * $porc;
+    $new_height = $imagick->getImageHeight() * $porc;
+
+    $imagick->resizeImage($new_width, $new_height, imagick::FILTER_LANCZOS, 1);
+
+    $imagick->writeImage($fileout);
+
+    $imagick->destroy();
+
+    return $fileout;
 
   }
 
@@ -270,26 +361,14 @@ trait Imagenes
 
   }
 
-  /**** WITHOUT USING *****/
-  public function pngTransparent($user_id, $file, $filename)
+  public function pngTransparent($user_id, $file_in, $file_out)
   {
-    $path = $this->imagePath("png", $user_id);
-    if(!file_exists($path)){
-      mkdir($path);
-      chmod($path, 0755);
-    }else{
-      array_map('unlink', glob($path . "*.png"));
-    }
+    $path = $this->imagePath("transp", $user_id);
 
-    $archivo = $file->store('images/png/' . $user_id, 'local');
-        // $archivo = $file->store('images/png/' . $user_id, 'local');
-
-    $archivo = $path . basename($archivo);
-
-        # create new ImageMagick object
-    $im = new Imagick($archivo);
-        # remove extra white space
-        // $im->clipImage(0);
+    # create new ImageMagick object
+    $im = new \Imagick($file_in);
+    # remove extra white space
+    // $im->clipImage(0);
     $im->setImageFormat('png');
 
     $color = "rgb(255,255,255)";
@@ -299,12 +378,6 @@ trait Imagenes
 
     $im->despeckleimage();
     header('Content-Type: image/png');
-
-    $namefile = basename($filename, ".png");
-    $namefile = str_replace(' ', '_', $namefile);
-    $namefile = str_replace(',', '', $namefile);
-
-    $file_out = $path . $namefile . '_transp.png';
 
     $response = $im->writeImage($file_out);
 

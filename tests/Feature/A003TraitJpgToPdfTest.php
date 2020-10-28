@@ -8,12 +8,12 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-class A04TraitJpgToPdfTest extends TestCase
+class A003TraitJpgToPdfTest extends TestCase
 {
     use Imagenes;
 
     /** @test */
-    public function A04TraitJpgToPdfTest()
+    public function A003TraitJpgToPdfTest()
     {
         // $this->MarkTestIncomplete('test only file, not image');
 
@@ -43,8 +43,6 @@ class A04TraitJpgToPdfTest extends TestCase
 
         $newFile = $this->imagePath('out', 'x') . '/test_prueba_firmado.pdf';
         $this->assertTrue(file_exists($newFile));
-
-        $this->MarkTestIncomplete('test only file, check image ' . $newFile);
 
     }
 }

@@ -116,7 +116,8 @@ class DocController extends Controller
 			];
 			$file_out = $filework[$value-1];
 
-			$this->addStamp($file_in, $back_sign, $seccion, $posX, $posY, $file_out);
+			// $this->addStamp($file_in, $back_sign, $seccion, $posX, $posY, $file_out);
+			$this->iAddStamp($file_in, $back_sign, $seccion, $posX, $posY, $file_out);
  		}
 
 		return [
@@ -137,7 +138,6 @@ class DocController extends Controller
 		if($check['success']){
 			$filename = $check['fileback']['filename'];
 			$response = $this->jpgToPdf($check['fileback']['pages'], $filename, $user_id);
-
 			if(!$response)
 			{
 				return ['success'=>false, 'mess'=>'no se genero el nuevo pdf'];

@@ -8,4 +8,4 @@ jpgToOnePdf
 
 
 
-phpunit --stop-on-failure --stderr
+alias phpuniti = "vendor/bin/phpunit --stop-on-failure --stderr"

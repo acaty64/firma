@@ -31,13 +31,6 @@ class A001TraitPdf2PngTest extends TestCase
         $user_id = 'x';
         $response = $this->pdf2png($user_id, $uploadedFile);
 
-        $check = [
-            'success' => true,
-            'filepath' => [
-                ''
-            ]
-        ];
-
         $new_file = $this->imagePath('png', $user_id) . 'page-0.png';
         $this->assertTrue(file_exists($new_file));
 
