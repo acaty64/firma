@@ -17,7 +17,7 @@
                         </div>
                         <br>
                         <div class="row">
-                            Seleccione el archivo de fotografia:
+                            Seleccione el archivo de fotografía:
                             <input type="file" name="photo" id="photo" class="btn btn-success ml-4" required accept="image/jpeg">
                         </div>
                         <br>

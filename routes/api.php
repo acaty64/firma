@@ -58,3 +58,13 @@ Route::post('/ce/preview', [
 	'uses' => 'Api\CEController@preview'
 ]);
 
+Route::post('/c1m/uploadPDF', [
+	'as' => 'c1m.uploadPDF',
+	'uses' => 'Api\C1MController@uploadPDF'
+]);
+
+Route::post('/c1m/preview', [
+	'as' => 'c1m.preview',
+	'uses' => 'Api\C1MController@preview'
+]);
+

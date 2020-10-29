@@ -34,7 +34,7 @@ class CertificateController extends Controller
 
     	foreach ($response['pages'] as $key => $value) {
 	    	$file_in = [
-	    		'filepath' => $this->pathGuide() . 'CERTIFICADO_fondo3507.jpg',
+	    		'filepath' => $this->pathGuide() . 'CERTIFICADO_fondo.jpg',
 	    	];
 	    	$file_sign = [
 	    		'filepath' => $value,
@@ -77,20 +77,13 @@ class CertificateController extends Controller
 	    	$files[] = [
 	    			'filename' => basename($value, '.png') . '.jpg'
 	    		];
-    		$resp_add = $this->addStamp($file_in, $file_sign, $seccion, $posX, $posY, $file_out);
+    		$resp_add = $this->iAddStamp($file_in, $file_sign, $seccion, $posX, $posY, $file_out);
     	}
 
 
         $resp = $this->jpgToPdf($files, $oldfilename, $user_id);
-    	// $resp = $this->jpgToPdf($files, $oldfilename, $user_id);
-
-// dd('CertificateController@merge', $resp);
-
 
 		return view('app.certificates.download')->with(['file' => $resp['filepath']]);
-
-
-    	// return ['CertificateController@png', $file->getClientOriginalName(), $response];
 
     }
 
