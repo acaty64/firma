@@ -70,9 +70,10 @@ class GuideController extends Controller
     $porc = 100/$wstamp;
     $porc = 0.3;
 
-    $stamp = $this->resizeImage($file_sign['filepath'], $porc);
+    $stamp = $this->resizeImagick($file_sign['filepath'], $porc, $file_sign['filepath']);
+    // $stamp = $this->resizeImage($file_sign['filepath'], $porc);
 
-    $this->saveFromImage($stamp, $file_sign['filepath']);
+    // $this->saveFromImage($stamp, $file_sign['filepath']);
 
     return $file_sign;
   }
@@ -181,7 +182,7 @@ class GuideController extends Controller
     $posX = $request->horizontal ;
     $posY = $request->vertical ;
 
-    $response = $this->addStamp($file_in, $file_stamp, $seccion, $posX, $posY, $file_out);
+    $response = $this->iAddStamp($file_in, $file_stamp, $seccion, $posX, $posY, $file_out);
 
     return [
       'success' => true,

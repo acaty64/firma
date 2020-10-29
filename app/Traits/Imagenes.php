@@ -145,60 +145,60 @@ trait Imagenes
 
   }
 
-  public function addStamp($file_in, $file_sign, $seccion, $posX, $posY, $file_out)
-  {
-    $file_in = $file_in['filepath'];
-    $file_stamp = $file_sign['filepath'];
+  // public function addStamp($file_in, $file_sign, $seccion, $posX, $posY, $file_out)
+  // {
+  //   $file_in = $file_in['filepath'];
+  //   $file_stamp = $file_sign['filepath'];
 
-    if(!file_exists($file_in)){
-      return false;
-    }
-    $img = $this->imageFromFile($file_in);
+  //   if(!file_exists($file_in)){
+  //     return false;
+  //   }
+  //   $img = $this->imageFromFile($file_in);
 
-    $stamp = $this->imageFromFile($file_stamp);
+  //   $stamp = $this->imageFromFile($file_stamp);
 
-    if(array_key_exists('porc_sign', $file_sign)){
-      $stamp = $this->resizeImage($file_stamp, $file_sign['porc_sign']/100);
-    }
+  //   if(array_key_exists('porc_sign', $file_sign)){
+  //     $stamp = $this->resizeImage($file_stamp, $file_sign['porc_sign']/100);
+  //   }
 
-    // $stamp->getImageResolution(300,300);
+  //   // $stamp->getImageResolution(300,300);
 
-    $wstamp = imagesx($stamp);
-    $hstamp = imagesy($stamp);
+  //   $wstamp = imagesx($stamp);
+  //   $hstamp = imagesy($stamp);
 
-    $TaxisX = imagesx($img);
-    $TaxisY = imagesy($img);
+  //   $TaxisX = imagesx($img);
+  //   $TaxisY = imagesy($img);
 
-    $px = $TaxisX/3;
-    $py = $TaxisY/3;
+  //   $px = $TaxisX/3;
+  //   $py = $TaxisY/3;
 
-    $secciones = [
-      1 => [0 * $px, 0 * $py],
-      2 => [1 * $px, 0 * $py],
-      3 => [2 * $px, 0 * $py],
-      4 => [0 * $px, 1 * $py],
-      5 => [1 * $px, 1 * $py],
-      6 => [2 * $px, 1 * $py],
-      7 => [0 * $px, 2 * $py],
-      8 => [1 * $px, 2 * $py],
-      9 => [2 * $px, 2 * $py],
-    ];
+  //   $secciones = [
+  //     1 => [0 * $px, 0 * $py],
+  //     2 => [1 * $px, 0 * $py],
+  //     3 => [2 * $px, 0 * $py],
+  //     4 => [0 * $px, 1 * $py],
+  //     5 => [1 * $px, 1 * $py],
+  //     6 => [2 * $px, 1 * $py],
+  //     7 => [0 * $px, 2 * $py],
+  //     8 => [1 * $px, 2 * $py],
+  //     9 => [2 * $px, 2 * $py],
+  //   ];
 
-    $axisX = $secciones[$seccion][0] + (($posX/100)*($px - $wstamp));
-    $axisY = $secciones[$seccion][1] + (($posY/100)*($py - $hstamp));
-    imagecopy($img, $stamp, $axisX, $axisY,
-     0, 0, $wstamp, $hstamp);
+  //   $axisX = $secciones[$seccion][0] + (($posX/100)*($px - $wstamp));
+  //   $axisY = $secciones[$seccion][1] + (($posY/100)*($py - $hstamp));
+  //   imagecopy($img, $stamp, $axisX, $axisY,
+  //    0, 0, $wstamp, $hstamp);
 
-    try {
-      //se copia la imagen
-      imageresolution($img, 200);
-      imagejpeg($img, $file_out['filepath'], 88);
-      return $file_out;
-    } catch (Exception $e) {
-      return ['success'=>false, 'mess'=>'no se genero archivo ' . $file_out['filepath'],];
-    }
+  //   try {
+  //     //se copia la imagen
+  //     imageresolution($img, 200);
+  //     imagejpeg($img, $file_out['filepath'], 88);
+  //     return $file_out;
+  //   } catch (Exception $e) {
+  //     return ['success'=>false, 'mess'=>'no se genero archivo ' . $file_out['filepath'],];
+  //   }
 
-  }
+  // }
 
   public function resizeImagick($filepath, $porc, $fileout)
   {
@@ -217,29 +217,29 @@ trait Imagenes
 
   }
 
-  public function resizeImage($filepath, $porc)
-  {
-    $imagen = $this->imageFromFile($filepath);
-    $ancho = imagesx($imagen);
-    $alto = imagesy($imagen);
+  // public function resizeImage($filepath, $porc)
+  // {
+  //   $imagen = $this->imageFromFile($filepath);
+  //   $ancho = imagesx($imagen);
+  //   $alto = imagesy($imagen);
 
-    $nuevo_ancho = $ancho * $porc;
-    $nuevo_alto = $alto * $porc;
+  //   $nuevo_ancho = $ancho * $porc;
+  //   $nuevo_alto = $alto * $porc;
 
-    $origen = $this->imageFromFile($filepath);
+  //   $origen = $this->imageFromFile($filepath);
 
-        // Cargar
-    $thumb = imagecreatetruecolor($nuevo_ancho, $nuevo_alto);
+  //       // Cargar
+  //   $thumb = imagecreatetruecolor($nuevo_ancho, $nuevo_alto);
 
-    header('Content-Type: image/png');
-    imagealphablending($thumb, false);
-    imagesavealpha($thumb, true);
+  //   header('Content-Type: image/png');
+  //   imagealphablending($thumb, false);
+  //   imagesavealpha($thumb, true);
 
-        // Cambiar el tamaño
-    imagecopyresized($thumb, $origen, 0, 0, 0, 0, $nuevo_ancho, $nuevo_alto, $ancho, $alto);
+  //       // Cambiar el tamaño
+  //   imagecopyresized($thumb, $origen, 0, 0, 0, 0, $nuevo_ancho, $nuevo_alto, $ancho, $alto);
 
-    return $thumb;
-  }
+  //   return $thumb;
+  // }
 
   public function saveFromImage($image, $fileout)
   {

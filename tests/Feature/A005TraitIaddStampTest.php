@@ -8,14 +8,16 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-class A005TraitAddStampTest extends TestCase
+class A005TraitIaddStampTest extends TestCase
 {
     use Imagenes;
 
     /** @test */
-    public function A005TraitAddStampTest()
+    public function A005TraitIaddStampTest()
     {
+        $user_id = "x";
 
+        $this->cleanPath('work', $user_id);
         $file_test = $this->imagePath('test') . 'back/page-2.jpg';
         $file_back = $this->imagePath('back', 'x') . 'page-2.jpg';
         copy($file_test, $file_back);
@@ -23,7 +25,6 @@ class A005TraitAddStampTest extends TestCase
         $old = new \Imagick($file_back);
         $res_old = $old->getImageResolution();
 
-        $user_id = "x";
         $file_in = [
             'filepath' => $this->imagePath('back', 'x') . 'page-2.jpg',
             'filename' => 'page-2.jpg',
@@ -44,7 +45,7 @@ class A005TraitAddStampTest extends TestCase
             'path' => 'images/work/x',
         ];
 
-        $response = $this->addStamp($file_in, $file_sign, $seccion, $posX, $posY, $file_out);
+        $response = $this->iAddStamp($file_in, $file_sign, $seccion, $posX, $posY, $file_out);
 
         $this->assertTrue($response == $file_out);
 
