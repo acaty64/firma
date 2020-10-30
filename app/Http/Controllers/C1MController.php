@@ -40,13 +40,14 @@ class C1MController extends Controller
             ];
         }
 
+        $new_name = basename($request->archivo->getClientOriginalName(),'.pdf') . "[M].pdf";
 
         $request =[
                 'user_id' => $user_id,
                 'pages' => $responsePDF['pages'],
                 'file_out' => [
-                    'filename' => $request->archivo->getClientOriginalName(),
-                    'imagefile' => '/storage/images/out/' . $user_id . '/' . $request->archivo->getClientOriginalName()
+                    'filename' => $new_name,
+                    'imagefile' => '/storage/images/out/' . $user_id . '/' . $new_name
                 ],
             ];
 
