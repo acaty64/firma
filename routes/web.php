@@ -57,8 +57,18 @@ Route::get('/certificate', [
 ]);
 
 Route::post('/certificate/merge', [
-    'as' => 'merge',
+    'as' => 'ce.merge',
     'uses' => 'CertificateController@merge'
+]);
+
+Route::get('/c1m', [
+    'as' => 'c1m',
+    'uses' => 'C1MController@index'
+]);
+
+Route::post('/c1m/merge', [
+    'as' => 'c1m.merge',
+    'uses' => 'C1MController@merge'
 ]);
 
 Route::get('/tools', [

@@ -19,7 +19,6 @@ class CEController extends Controller
 
 		try {
 	        $response = $this->pdf2png($user_id, $file_PDF);
-
 	        if($response['filename'] == $request->file_PDF->getClientOriginalName())
 	        {
 	        	$pages = [];

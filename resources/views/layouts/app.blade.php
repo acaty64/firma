@@ -36,6 +36,7 @@
                 <a href="{{ route('access.index') }}" class="btn btn-primary mr-2" role="button">Accesos</a>
                 <a href="{{ route('sign') }}" class="btn btn-primary mr-2" role="button">Firmas</a>
                 <a href="{{ route('certificate') }}" class="btn btn-primary mr-2" role="button">Certificados</a>
+                <a href="{{ route('c1m') }}" class="btn btn-primary mr-2" role="button">Const.1eraMat</a>
                 <a href="{{ route('tools') }}" class="btn btn-primary mr-2" role="button">Herramientas</a>
               @endif
             @endif
