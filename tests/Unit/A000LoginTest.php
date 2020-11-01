@@ -6,7 +6,7 @@ use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-class LoginTest extends TestCase
+class A000LoginTest extends TestCase
 {
 	use DatabaseTransactions;
 
@@ -14,7 +14,8 @@ class LoginTest extends TestCase
     public function it_does_not_allow_guests_to_discover_auths_urls()
     {
         $this->get('invalid-url')
-            ->assertStatus(404);
+            ->assertStatus(302)
+            ->assertRedirect('login');
     }
 
     /** @test */

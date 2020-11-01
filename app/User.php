@@ -45,7 +45,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $append = ['access'];
+    protected $append = ['access', 'is_auth', 'is_admin'];
+
+    public function getIsAuthAttribute()
+    {
+        if($this->id >= 1){
+            return true;
+        }
+        return false;
+    }
+
+    public function getIsAdminAttribute()
+    {
+        if($this->id == 1){
+            return true;
+        }
+        return false;
+    }
+
 
     public function getAccessAttribute()
     {

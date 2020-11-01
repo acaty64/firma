@@ -7,47 +7,51 @@ use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-class AccessTest extends TestCase
+class A001AccessTest extends TestCase
 {
 	use DatabaseTransactions;
 
     /** @test **/
-    public function a_master_user_view_index()
+    public function a_non_user_redirect_to_login()
     {
-        $user = User::create([
-    		'name' => 'John Doe',
-    		'email' => 'jdoe@gmail.com'
-    	]);
+        $this->get('/home')
+            ->assertRedirect('login');
+    }
+
+    /** @test **/
+    public function an_authorized_user_redirect_to_home()
+    {
+        $user = User::findOrFail(3);
+
+        $req = $this->actingAs($user)
+            ->get('/home')
+            ->assertViewIs('home');
+    }
+
+    /** @test **/
+    public function an_admin_user_view_index()
+    {
+        $user = User::findOrFail(1);
         $this->actingAs($user)
         	->get(route('access.index'))
         	->assertStatus(200);
     }
 
     /** @test **/
-    public function a_non_master_user_cannot_view_index()
+    public function a_non_admin_user_cannot_view_index()
     {
-        $user1 = User::create([
-    		'name' => 'John Doe',
-    		'email' => 'jdoe@gmail.com'
-    	]);
-        $user2 = User::create([
-    		'name' => 'Jane Doe',
-    		'email' => 'janed@gmail.com'
-    	]);
-        $this->actingAs($user2)
+        $user = User::find(2);
+        $this->actingAs($user)
         	->get(route('access.index'))
-        	->assertStatus(200)
-        	->assertViewIs('app.unlogued');
+        	->assertStatus(403)
+        	->assertViewIs('errors.forbidden');
     }
 
     /** @test **/
-    public function it_can_store_a_new_access()
+    public function an_admin_user_can_store_a_new_access()
     {
+        $user = User::find(1);
     	$request = ['newuser'=>5];
-        $user = User::create([
-    		'name' => 'John Doe',
-    		'email' => 'jdoe@gmail.com'
-    	]);
         $response = $this->actingAs($user)
         	->post(route('access.store'), $request)
     		->assertStatus(302)
@@ -59,17 +63,14 @@ class AccessTest extends TestCase
     /** @test **/
     public function it_can_destroy_an_access()
     {
+        $user = User::find(1);
     	$request = ['newuser'=>5];
-        $user = User::create([
-    		'name' => 'John Doe',
-    		'email' => 'jdoe@gmail.com'
-    	]);
         $access = Access::create([
     		'user_id' => 5,
+            'profile_id' => 2
     	]);
-
         $response = $this->actingAs($user)
-        	->get('/access/destroy/' . $access->id)
+        	->get(route('access.destroy', $access->id))
     		->assertStatus(302)
     		->assertRedirect(route('access.index'));
 

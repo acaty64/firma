@@ -62,6 +62,6 @@ class LoginController extends Controller
 	    	return 'no logueado';
 	    }
 
-	}	
+	}
 
 }

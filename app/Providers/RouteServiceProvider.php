@@ -30,7 +30,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Route::macro('catch', function($action)
+        {
+            $this->any('{anything}', $action)
+                ->where('anything', '.*')
+                ->fallback();
+        });
 
         parent::boot();
     }
@@ -45,22 +50,32 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
+        $this->mapAuthRoutes();
+        $this->mapAdminRoutes();
 
-        //
     }
 
-    /**
-     * Define the "web" routes for the application.
-     *
-     * These routes all receive session state, CSRF protection, etc.
-     *
-     * @return void
-     */
+
     protected function mapWebRoutes()
     {
         Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/web.php'));
+    }
+
+    protected function mapAuthRoutes()
+    {
+        Route::middleware(['web', 'is_auth'])
+            ->namespace($this->namespace)
+            ->group(base_path('routes/auth.php'));
+    }
+
+    protected function mapAdminRoutes()
+    {
+        Route::prefix('/admin')
+            ->middleware(['web', 'is_auth', 'is_admin'])
+            ->namespace($this->namespace)
+            ->group(base_path('routes/admin.php'));
     }
 
     /**

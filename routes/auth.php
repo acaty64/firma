@@ -3,17 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-Route::catch(function()
-{
-    throw new NotFoundHttpException;
-});
-
 Route::get('/sign', [
 	'as' => 'sign',
 	'uses' => 'SignController@index'
 ]);
-
-Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/certificate', [
     'as' => 'certificate',
@@ -49,3 +42,9 @@ Route::post('/tools/resizejpg', [
     'as' => 'resizejpg',
     'uses' => 'ToolsController@_resizejpg'
 ]);
+
+
+Route::catch(function()
+{
+    throw new NotFoundHttpException;
+});

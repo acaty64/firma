@@ -20,7 +20,8 @@ class AdminMiddleware
             return redirect()->to('login');
         };
         if(!$this->auth->user()->is_admin){
-            return redirect()->to('home');
+            return response()->view('errors.forbidden', [], 403);
+            // return redirect()->to('home');
         }
         return $next($request);
     }

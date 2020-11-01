@@ -15,13 +15,13 @@ class AccessController extends Controller
      */
     public function index()
     {
-        if(\Auth::user()->id == 1){
-            return view('app.index', [
+        // if(\Auth::user()->id == 1){
+            return view('app.access.index', [
                 'users' => User::users(),
                 'no_users' => User::noUsers(),
             ]);
-        }
-        return view('app.unlogued');
+        // }
+        // return view('app.unlogued');
     }
 
     /**
@@ -45,7 +45,7 @@ class AccessController extends Controller
         $validatedData = $request->validate([
             'newuser' => 'required',
         ]);
-        Access::create(['user_id' => $request->newuser]);
+        Access::create(['user_id' => $request->newuser, 'profile_id' => 2]);
         return redirect(route('access.index'));
     }
 
