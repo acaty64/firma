@@ -9,7 +9,7 @@ class Access extends Model
 	protected $table = 'accesses';
 
     protected $fillable = [
-        'user_id',
+        'user_id', 'profile_id'
     ];
 
 	public function getUserAttribute()
