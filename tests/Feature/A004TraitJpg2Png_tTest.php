@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Traits\Imagenes;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -11,6 +12,7 @@ use Tests\TestCase;
 class A004TraitJpg2Png_tTest extends TestCase
 {
     use Imagenes;
+    use DatabaseTransactions;
 
     /** @test */
     public function A004TraitJpg2PngTest()

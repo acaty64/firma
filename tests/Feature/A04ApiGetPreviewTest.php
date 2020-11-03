@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -9,6 +10,7 @@ use Tests\TestCase;
 
 class A04ApiGetPreviewTest extends TestCase
 {
+    use DatabaseTransactions;
     /** @test */
     public function A04ApiGetPreviewTest()
     {

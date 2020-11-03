@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Traits\Imagenes;
 use App\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -12,7 +13,7 @@ use Tests\TestCase;
 class B02C1MControllerTest extends TestCase
 {
     use Imagenes;
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /** @test */
     public function B02C1MControllerIndexTest()

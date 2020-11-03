@@ -2,11 +2,13 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class A02ApiGuideTest extends TestCase
 {
+    use DatabaseTransactions;
     /** @test */
     public function ApiGuideTest()
     {

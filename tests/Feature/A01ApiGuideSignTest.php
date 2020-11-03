@@ -2,12 +2,14 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class A01ApiGuideSignTest extends TestCase
 {
+    use DatabaseTransactions;
     /** @test */
     public function A01ApiGuideSignTest()
     {
