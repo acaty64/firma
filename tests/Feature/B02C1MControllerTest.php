@@ -20,10 +20,7 @@ class B02C1MControllerTest extends TestCase
     {
         // $this->markTestIncomplete('En construccion');
 
-        $user = User::create([
-            'name' => 'John Doe',
-            'email' => 'jdoe@gmail.com'
-        ]);
+        $user = User::findOrFail(3);
         $this->actingAs($user);
         $response = $this->get('/c1m');
         $response->assertViewIs('app.c1m.index');
@@ -35,10 +32,7 @@ class B02C1MControllerTest extends TestCase
     {
         // $this->markTestIncomplete('En construccion');
 
-        $user = User::create([
-            'name' => 'John Doe',
-            'email' => 'jdoe@gmail.com'
-        ]);
+        $user = User::findOrFail(3);
 
         $this->actingAs($user);
 

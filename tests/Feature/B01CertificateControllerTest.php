@@ -20,10 +20,7 @@ class B01CertificateControllerTest extends TestCase
     {
         // $this->markTestIncomplete('En construccion');
 
-        $user = User::create([
-            'name' => 'John Doe',
-            'email' => 'jdoe@gmail.com'
-        ]);
+        $user = User::findOrFail(3);
         $this->actingAs($user);
         $response = $this->get('/certificate');
         $response->assertViewIs('app.certificates.index');
@@ -35,11 +32,7 @@ class B01CertificateControllerTest extends TestCase
     {
         // $this->markTestIncomplete('En construccion');
 
-        $user = User::create([
-            'name' => 'John Doe',
-            'email' => 'jdoe@gmail.com'
-        ]);
-
+        $user = User::findOrFail(3);
         $this->actingAs($user);
 
         $fake_front = storage_path('app/public/images/test/fake_CE.pdf');

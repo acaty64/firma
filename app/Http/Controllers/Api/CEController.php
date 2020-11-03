@@ -125,16 +125,30 @@ class CEController extends Controller
 			$this->iAddStamp($file_in, $file_sign, $seccion, $posX, $posY, $file_out);
 			$pages_jpg[] = $file_out['filepath'];
 
+			$response = $this->reduce($file_out['filepath']);
 		}
-
 
 		$pdf = new \Imagick($pages_jpg);
 		$fileout = $this->imagePath('out', $user_id) . $file_pdf['filename'];
 		$pdf->setImageFormat('pdf');
 		$pdf->writeImages($fileout, true);
-
+		return true;
 	}
 
 
+	private function reduce($page)
+	{
+		try{
+			chmod($page, 0777);
+			$image = new Imagick();
+			$image->readImage($page);
+			$image->resampleImage(100, 100, \Imagick::FILTER_LANCZOS, 1);
+			$image->writeImage();
+			$image->clear();
+			return true;
+		} catch (Exception $e) {
+			return false;
+		}
+	}
 
 }
