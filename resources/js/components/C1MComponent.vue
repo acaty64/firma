@@ -5,7 +5,7 @@
 			<div class="col-md-10">
 				<div class="card">
 					<div class="card-header">
-						Certificados de Estudios
+						Constancia de Primera Matrícula
 					</div>
 					<div class="card-body">
 						<div class="row">
@@ -17,19 +17,9 @@
 							</div>
 						</div>
 					</div>
-					<div class="card-body">
-						<div class="row">
-							<div class="col-md-2">
-								Archivo Foto:
-							</div>
-							<div class="col-md-8">
-								<input type="file" id="upload_photo" ref="upload_photo" @change="change_photo" accept=".jpg" name="upload_photo">
-							</div>
-						</div>
-					</div>
 					<div v-if="loaded" class="card-body">
 						<div class="row">
-							<div  v-if="!stat_preview" class="col-md-4">
+							<div v-if="!stat_preview" class="col-md-4">
 								<button v-on:click="getPreview" class="btn btn-primary">
 									Vista Preliminar
 								</button>
@@ -66,7 +56,6 @@
 				'waiting' : false,
 				'loaded' : false,
 				'files_loaded': {
-					'photo' : false,
 					'PDF' : false,
 				},
 				'stat_preview' : false,
@@ -85,11 +74,10 @@
 			console.log('CEComponent.vue mounted.');
 		},
 
-
 		watch: {
 			files_loaded: {
 				handler: function () {
-						if ( this.files_loaded.photo && this.files_loaded.PDF ){
+						if ( this.files_loaded.PDF ){
 							this.loaded = true;
 						} else {
 							this.loaded = false;
@@ -127,19 +115,14 @@
 				this.waiting = true;
 				var request = {
 					user_id: this.user_id,
-					filephoto : {
-						path: 'images/jpg/',
-						filepath: this.filefirma,
-					},
 					pages : this.filePDF['pages'],
 					file_out : {
 						filename: this.originalName
 					},
 				};
-// console.log('getPreview request', request);
         var URLdomain = window.location.host;
         var protocol = window.location.protocol;
-        var url = protocol+'//'+URLdomain+'/api/ce/preview';
+        var url = protocol+'//'+URLdomain+'/api/c1m/preview';
         axios.post(url, request).then(response => {
 console.log('getPreview response.data: ',response.data);
 					this.preview = response.data.success;
@@ -170,7 +153,7 @@ console.log('getPreview response.data: ',response.data);
 				request.append('user_id', this.user_id);
         var URLdomain = window.location.host;
         var protocol = window.location.protocol;
-        var url = protocol+'//'+URLdomain+'/api/ce/uploadPDF';
+        var url = protocol+'//'+URLdomain+'/api/c1m/uploadPDF';
         axios.post(url, request).then(response => {
 					console.log('change_pdf response', response.data);
 
@@ -180,27 +163,6 @@ console.log('getPreview response.data: ',response.data);
 
 				}).catch(function (error) {
 					console.log('error change_pdf', error);
-				});
-			},
-
-			change_photo(event)
-			{
-				this.files_loaded.photo = false;
-				this.stat_preview = false;
-				var request = new FormData();
-				request.append('file_photo', event.target.files[0]);
-				request.append('user_id', this.user_id);
-        var URLdomain = window.location.host;
-        var protocol = window.location.protocol;
-        var url = protocol+'//'+URLdomain+'/api/ce/uploadPhoto';
-        axios.post(url, request).then(response => {
-					console.log('change_photo response.data', response.data);
-
-        	this.filefirma = response.data.path + response.data.filename;
-        	this.files_loaded.photo = true;
-
-				}).catch(function (error) {
-					console.log('error change_photo', error);
 				});
 			},
 

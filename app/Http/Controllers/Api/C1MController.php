@@ -75,10 +75,17 @@ class C1MController extends Controller
 
 		}
 
+		$new_name = basename($file_pdf['filename'], '.pdf') . '[M].pdf' ;
 		$pdf = new \Imagick($pages_jpg);
-		$fileout = $this->imagePath('out', $user_id) . $file_pdf['filename'];
+		$fileout = $this->imagePath('out', $user_id) . $new_name;
 		$pdf->setImageFormat('pdf');
 		$pdf->writeImages($fileout, true);
+
+		return [
+			'success' => true,
+			'filepath' => '/storage/images/out/' . $user_id . '/' . $new_name,
+			'filename' => $new_name
+		];
 
 	}
 

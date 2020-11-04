@@ -137,6 +137,8 @@ trait Imagenes
       $img->compositeImage($stamp, Imagick::COMPOSITE_DEFAULT, $axisX, $axisY, Imagick::CHANNEL_ALPHA);
       $img->writeImage($file_out['filepath']);
 
+      chmod($file_out['filepath'], 0777);
+
       $img->destroy();
 
       return $file_out;

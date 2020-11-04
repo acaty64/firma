@@ -6,4 +6,4 @@
 </div>
 @endsection
 
-@section('view','certificate.blade.php')
+@section('view','index.blade.php')
