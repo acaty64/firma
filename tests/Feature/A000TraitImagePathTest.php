@@ -37,9 +37,14 @@ class A000TraitImagePathTest extends TestCase
 
         $newfile = $this->imagePath('back', $user_id) . 'fake_firma.png';
 
+        $path = $this->imagePath('back', $user_id);
+
+        $response = $this->cleanPath($path, 'png');
+
         copy($fake_file, $newfile);
 
-        $path = $this->imagePath('back', $user_id);
+        $this->assertTrue(file_exists($newfile));
+
 
         $response = $this->cleanPath($path, 'png');
 
