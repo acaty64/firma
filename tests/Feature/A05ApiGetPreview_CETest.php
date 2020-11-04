@@ -106,8 +106,8 @@ class A05ApiGetPreview_CETest extends TestCase
         $response = $this->post('/api/ce/preview', $request)
             ->assertStatus(200);
 
-        $file_out = $this->imagePath('out', $user_id) . $request[
-            'file_out']['filename'];
+        $file_out = $this->imagePath('out', $user_id) .
+            'CE_20010001[M].pdf';
         $this->assertTrue(file_exists($file_out));
 
     }

@@ -15,7 +15,8 @@ class CertificateController extends CEController
     public function index()
     {
     	$user_id = Auth::user()->id;
-    	return view('app.certificates.index')->with(['user_id' => $user_id]);
+    	return view('app.certificates.index')
+            ->with(['user_id' => $user_id]);
     }
 
     public function merge(Request $request)

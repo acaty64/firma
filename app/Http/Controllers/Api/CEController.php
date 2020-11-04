@@ -16,10 +16,11 @@ class CEController extends Controller
 	{
 		$user_id = $request->user_id;
 		$file_PDF = $request->file_PDF;
-
+		$this->cleanPath($this->imagePath('transp', $user_id), 'png');
 		try {
 	        $response = $this->pdf2png($user_id, $file_PDF);
-	        if($response['filename'] == $request->file_PDF->getClientOriginalName())
+	        // if($response['filename'] == $request->file_PDF->getClientOriginalName())
+	        if($response['num_pages_pdf'] > 0)
 	        {
 	        	$pages = [];
 		        foreach ($response['pages'] as $new_file) {
@@ -129,10 +130,16 @@ class CEController extends Controller
 		}
 
 		$pdf = new \Imagick($pages_jpg);
-		$fileout = $this->imagePath('out', $user_id) . $file_pdf['filename'];
+		$new_name = basename($file_pdf['filename'], '.pdf') . '[M].pdf' ;
+		$fileout = $this->imagePath('out', $user_id) . $new_name;
 		$pdf->setImageFormat('pdf');
 		$pdf->writeImages($fileout, true);
-		return true;
+
+		return [
+			'success' => true,
+			'filepath' => '/storage/images/out/' . $user_id . '/' . $new_name,
+			'filename' => $new_name
+		];
 	}
 
 
