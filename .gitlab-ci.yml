@@ -37,7 +37,7 @@ before_script:
   - php artisan config:cache
 
   # Run database migrations.
-  - php artisan migrate
+  - php artisan migrate:fresh --database=mysql_tests --seed
 
   # Run storage link.
   - php artisan storage:link
