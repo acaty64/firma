@@ -4,7 +4,7 @@ namespace App\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use \Imagick;
+use Imagick;
 use LynX39\LaraPdfMerger\Facades\PdfMerger;
 
 trait Imagenes
@@ -23,7 +23,7 @@ trait Imagenes
   {
     try {
       $fileout = $this->imagePath('png', $user_id) . basename($file, 'jpg') . 'png';
-      $imagick = new Imagick($file);
+      $imagick = new \Imagick($file);
       $imagick->setResolution(200, 200);
       $imagick->writeImages($fileout, true);
 
@@ -52,7 +52,7 @@ trait Imagenes
     } catch (Exception $e) {
       return ['success'=>false, 'mess'=>'no se grabo archivo ' . $originalName,];
     }
-    $imagick = new Imagick();
+    $imagick = new \Imagick();
 
     $imagick->setResolution(200, 200);
 
@@ -97,14 +97,14 @@ trait Imagenes
       return false;
     }
 
-    $img = new Imagick($file_in);
+    $img = new \Imagick($file_in);
 
-    $stamp = new Imagick($file_stamp);
+    $stamp = new \Imagick($file_stamp);
 
     if(array_key_exists('porc_sign', $file_sign)){
       // $stamp = $this->resizeImage($file_stamp, $file_sign['porc_sign']/100);
       $this->resizeImagick($file_stamp, $file_sign['porc_sign']/100, $file_stamp);
-      $stamp = new Imagick($file_stamp);
+      $stamp = new \Imagick($file_stamp);
     }
 
     // $stamp->getImageResolution(300,300);
@@ -151,7 +151,7 @@ trait Imagenes
 
   public function resizeImagick($filepath, $porc, $fileout)
   {
-    $imagick = new Imagick($filepath);
+    $imagick = new \Imagick($filepath);
 
     $new_width = $imagick->getImageWidth() * $porc;
     $new_height = $imagick->getImageHeight() * $porc;
@@ -257,7 +257,7 @@ trait Imagenes
       $files_jpg[] = $file['filepath'];
     }
 
-    $pdf = new Imagick($files_jpg);
+    $pdf = new \Imagick($files_jpg);
 
     $pdf->setImageFormat('pdf');
     $pdf->writeImages($newfilename, true);
@@ -292,7 +292,7 @@ trait Imagenes
     $path = $this->imagePath("transp", $user_id);
 
     # create new ImageMagick object
-    $im = new Imagick($file_in);
+    $im = new \Imagick($file_in);
     # remove extra white space
     // $im->clipImage(0);
     $im->setImageFormat('png');
@@ -300,7 +300,7 @@ trait Imagenes
     $color = "rgb(255,255,255)";
     $alpha = 0.0;
     $fuzz = 0;
-    $im->transparentPaintImage($color, $alpha, $fuzz * Imagick::getQuantum(), false);
+    $im->transparentPaintImage($color, $alpha, $fuzz * \Imagick::getQuantum(), false);
 
     $im->despeckleimage();
     header('Content-Type: image/png');
