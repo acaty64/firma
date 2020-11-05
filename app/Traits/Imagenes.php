@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use \Imagick;
 use LynX39\LaraPdfMerger\Facades\PdfMerger;
 
 trait Imagenes
