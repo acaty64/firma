@@ -20,6 +20,7 @@ class A003TraitJpgToPdfTest extends TestCase
         // $this->MarkTestIncomplete('test only file, not image');
 
         $user_id = "x";
+        $this->cleanPath($this->imagePath("work", $user_id), 'jpg');
         $files = [
             ["filepath" => "/home/vagrant/code/firma/public/storage/images/work/x/page-0.jpg"],
             ["filepath" => "/home/vagrant/code/firma/public/storage/images/work/x/page-1.jpg"],
@@ -29,8 +30,9 @@ class A003TraitJpgToPdfTest extends TestCase
         $check = [];
 
         foreach ($files as $file) {
-
-            copy($this->imagePath('test') . 'work/' . basename($file['filepath']), $file['filepath']);
+            $file_test = $this->imagePath('test') . 'work/' . basename($file['filepath']);
+            $this->assertTrue(file_exists($file_test));
+            copy($file_test, $file['filepath']);
         }
 
         $oldfilename = "test_prueba.pdf";
