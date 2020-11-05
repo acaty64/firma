@@ -20,6 +20,7 @@ class A005TraitIaddStampTest extends TestCase
         $user_id = "x";
 
         $this->cleanPath('work', $user_id);
+        $this->cleanPath('back', $user_id);
         $file_test = $this->imagePath('test') . 'back/page-2.jpg';
         $file_back = $this->imagePath('back', 'x') . 'page-2.jpg';
         copy($file_test, $file_back);
