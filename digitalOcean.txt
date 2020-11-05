@@ -9,3 +9,24 @@ jpgToOnePdf
 
 
 alias phpuniti = "vendor/bin/phpunit --stop-on-failure --stderr"
+
+
+
+
+CODESHIP
+Cambiar limite de memoria
+sed -i'' 's/^memory_limit=.*/memory_limit = 512m/g' ${HOME}/.phpenv/versions/7.2/etc/php.ini
+
+Cambiar acceso PDF en policy.
+### sed -i'' 's/^<policy domain="coder" rights="none" pattern="PDF" />/<policy domain="coder" rights="read|write" pattern="PDF" />/g' ${HOME}/.phpenv/versions/7.2/etc/ImageMagick-6/policy.xml
+sed -i'' 's/^<policy domain="coder" rights="none" pattern="PDF" />/<policy domain="coder" rights="read|write" pattern="PDF" />/g' ${HOME}/etc/ImageMagick-6/policy.xml
+
+
+No funciona
+Activar extension gd2
+;extension=gd2
+sed -i'' 's/^;extension=gd2/extension=gd2/g' ${HOME}/.phpenv/versions/7.2/etc/php.ini
+
+No funciona
+Activar extension imagick
+sed -i '$a extension=imagick' ${HOME}/.phpenv/versions/7.2/etc/php.ini
