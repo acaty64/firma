@@ -22,9 +22,9 @@ class A003TraitJpgToPdfTest extends TestCase
         $user_id = "x";
         $this->cleanPath($this->imagePath("work", $user_id), 'jpg');
         $files = [
-            ["filepath" => "/home/vagrant/code/firma/public/storage/images/work/x/page-0.jpg"],
-            ["filepath" => "/home/vagrant/code/firma/public/storage/images/work/x/page-1.jpg"],
-            ["filepath" => "/home/vagrant/code/firma/public/storage/images/work/x/page-2.jpg"]
+                ["filepath" => $this->imagePath('work', $user_id) . "page-0.jpg"],
+                ["filepath" => $this->imagePath('work', $user_id) . "page-1.jpg"],
+                ["filepath" => $this->imagePath('work', $user_id) . "page-2.jpg"],
             ];
 
         $check = [];

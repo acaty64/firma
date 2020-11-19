@@ -16,7 +16,6 @@ class C1MController extends Controller
 	{
 		$user_id = $request->user_id;
 		$file_PDF = $request->file_PDF;
-
 		try {
 	        $response = $this->pdf2png($user_id, $file_PDF);
 

@@ -92,11 +92,11 @@ class A05ApiGetPreview_CETest extends TestCase
         $request =[
                 'user_id' => $user_id,
                 'pages' => [
-                        "/home/vagrant/code/firma/storage/app/public/images/transp/x/page-0.png",
-                        "/home/vagrant/code/firma/storage/app/public/images/transp/x/page-1.png",
-                        "/home/vagrant/code/firma/storage/app/public/images/transp/x/page-2.png"
+                        $this->imagePath("transp", "x") . "page-0.png",
+                        $this->imagePath("transp", "x") . "page-1.png",
+                        $this->imagePath("transp", "x") . "page-2.png",
                     ],
-                'file_photo' => "/home/vagrant/code/firma/storage/app/public/images/png/x/photo.png",
+                'file_photo' => $this->imagePath("png", "x") . "photo.png",
                 'file_out' => [
                     'filename' => 'CE_20010001.pdf',
                     'imagefile' => '/images/out/x/CE_20010001.pdf'

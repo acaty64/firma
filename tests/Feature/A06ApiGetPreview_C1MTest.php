@@ -58,7 +58,7 @@ class A06ApiGetPreview_C1MTest extends TestCase
         $request =[
                 'user_id' => $user_id,
                 'pages' => [
-                        "/home/vagrant/code/firma/storage/app/public/images/transp/x/page.png",
+                        $this->imagePath("transp", "x") . "page.png",
                     ],
                 'file_out' => [
                     'filename' => 'C1M_202010005.pdf',

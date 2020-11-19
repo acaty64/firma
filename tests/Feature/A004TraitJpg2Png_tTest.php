@@ -19,7 +19,7 @@ class A004TraitJpg2Png_tTest extends TestCase
     {
 
         $user_id = "x";
-        $file = "/home/vagrant/code/firma/public/storage/images/test/fake_photo.jpg";
+        $file = $this->imagePath("test") . "fake_photo.jpg";
 
         $response = $this->jpg2Png($user_id, $file);
 
@@ -59,8 +59,8 @@ class A004TraitJpg2Png_tTest extends TestCase
 
         $user_id = "x";
 
-        $file_in = "/home/vagrant/code/firma/public/storage/images/png/x/fake_photo.png";
-        $file_out = "/home/vagrant/code/firma/public/storage/images/transp/x/fake_photo.png";
+        $file_in = $this->imagePath("png", "x") . "fake_photo.png";
+        $file_out = $this->imagePath("transp", "x") . "fake_photo.png";
 
 
         $response = $this->pngTransparent($user_id, $file_in, $file_out);

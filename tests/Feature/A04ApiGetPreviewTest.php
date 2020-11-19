@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Traits\Imagenes;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -10,6 +11,7 @@ use Tests\TestCase;
 
 class A04ApiGetPreviewTest extends TestCase
 {
+    use Imagenes;
     use DatabaseTransactions;
     /** @test */
     public function A04ApiGetPreviewTest()
@@ -29,15 +31,15 @@ class A04ApiGetPreviewTest extends TestCase
             "fileback" => [
                 "filename" => "PAPEL_MEMBRETADO_3.pdf",
                 "pages" => [
-                    "/home/vagrant/code/firma/public/storage/images/back/x/page-0.jpg",
-                    "/home/vagrant/code/firma/public/storage/images/back/x/page-1.jpg",
-                    "/home/vagrant/code/firma/public/storage/images/back/x/page-2.jpg"
+                        $this->imagePath("back", "x") . "page-0.jpg",
+                        $this->imagePath("back", "x") . "page-1.jpg",
+                        $this->imagePath("back", "x") . "page-2.jpg",
                     ]
             ],
             "filefirma"  => [
                 "path" => "images/view/",
                 "filename" => "fake_firma.png",
-                "filepath" => "/home/vagrant/code/firma/public/storage/images/view/x/fake_firma.png"
+                "filepath" => $this->imagePath("view", "x") . "fake_firma.png"
             ],
             "seccion"  => "3" ,
             "horizontal"  => "50" ,

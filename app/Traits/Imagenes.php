@@ -43,15 +43,22 @@ trait Imagenes
 
     $path = $this->imagePath("pdf", $user_id);
     $this->cleanPath($path, 'pdf');
-
     $originalName = $file->getClientOriginalName();
     try {
-      $fileBack = $file->store('images/pdf/' . $user_id, 'local');
-      $fileBack = $this->imagePath("pdf", $user_id) . basename($fileBack);
+      $file_back = $file->store('images/pdf/' . $user_id, 'local');
+      $fileBack = $this->imagePath("pdf", $user_id) . basename($file_back);
       chmod($fileBack, 0755);
     } catch (Exception $e) {
-      return ['success'=>false, 'mess'=>'no se grabo archivo ' . $originalName,];
+      return ['success'=>false, 'mess'=>'no se grabo archivo ' . $originalName];
     }
+
+    if(!file_exists($fileBack)){
+      return [
+        'success' =>false,
+        'message' => 'Not found ' . $fileBack
+      ];
+    }
+
     $imagick = new \Imagick();
 
     $imagick->setResolution(200, 200);
@@ -61,9 +68,12 @@ trait Imagenes
     $num_pages_pdf = $imagick->getNumberImages();
 
     $pathOut = 'storage/images/png/' . $user_id . '/';
+    chmod($this->imagePath("png", $user_id), 0755);
+
     $nameOut = "page";
 
-    $fileout = public_path($pathOut . $nameOut . '.png');
+    // $fileout = public_path($pathOut . $nameOut . '.png');
+    $fileout = $this->imagePath("png", $user_id) . $nameOut . '.png';
     $imagick->writeImages($fileout, true);
 
     $npages = $imagick->getNumberImages();
@@ -71,7 +81,8 @@ trait Imagenes
     {
       for ($x = 0; $x < $npages; $x++ )
       {
-        $pages[$x] = public_path($pathOut . $nameOut . '-' . $x . '.png');
+        // $pages[$x] = public_path($pathOut . $nameOut . '-' . $x . '.png');
+        $pages[$x] = $this->imagePath("png", $user_id) . $nameOut . '-' . $x . '.png';
         chmod($pages[$x], 0777);
       }
     } else {
@@ -303,7 +314,7 @@ trait Imagenes
     $im->transparentPaintImage($color, $alpha, $fuzz * \Imagick::getQuantum(), false);
 
     $im->despeckleimage();
-    header('Content-Type: image/png');
+    // header('Content-Type: image/png');
 
     $response = $im->writeImage($file_out);
 

@@ -1,0 +1,55 @@
+version: '3'
+services:
+  app:
+    container_name: app
+    build:
+      context: ./docker/app
+      dockerfile: Dockerfile
+    image: firma/app
+    volumes:
+     - .:/var/www/html
+    ports:
+     - "${APP_PORT}:80"
+    networks:
+     - stydenet
+  node:
+    container_name: node
+    image: node:9.8
+    restart: unless-stopped
+    tty: true
+    working_dir: /var/www/html
+    volumes:
+     - .:/var/www/html
+    networks:
+     - stydenet
+  mysql:
+    container_name: mysql
+    image: mysql:5.7
+    ports:
+     - "${DB_PORT}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+    volumes:
+     - mysqldata:/var/lib/mysql
+    networks:
+     - stydenet
+  redis:
+    container_name: redis
+    image: redis:alpine
+    restart: unless-stopped
+    tty: true
+    volumes:
+     - redisdata:/data
+    networks:
+     - stydenet
+networks:
+  stydenet:
+    driver: "bridge"
+volumes:
+  mysqldata:
+    driver: "local"
+  redisdata:
+    driver: "local"
