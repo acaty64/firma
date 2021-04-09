@@ -23,7 +23,7 @@ class A000LoginTest extends TestCase
     {
     	$user = User::create([
     		'name' => 'John Doe',
-    		'email' => 'jdoe@gmail.com'
+    		'email' => 'jdoe1@gmail.com'
     	]);
         $this->actingAs($user);
 
@@ -36,7 +36,7 @@ class A000LoginTest extends TestCase
     {
     	$user = User::create([
     		'name' => 'John Doe',
-    		'email' => 'jdoe@gmail.com'
+    		'email' => 'jdoe1@gmail.com'
     	]);
         $this->actingAs($user);
         $response = $this->get('login')
@@ -49,7 +49,7 @@ class A000LoginTest extends TestCase
     {
     	$user = User::create([
     		'name' => 'John Doe',
-    		'email' => 'jdoe@gmail.com'
+    		'email' => 'jdoe1@gmail.com'
     	]);
         $this->actingAs($user);
         $response = $this->get('sign')

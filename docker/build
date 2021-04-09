@@ -1,4 +1,15 @@
 #!/usr/bin/env bash
 
-docker build -f app/Dockerfile -t firma/app:latest ./app
+export APP_VERSION=1.0.2
+export APP_NAME=firma
+export APP_IMAGE=acaty/$APP_NAME:$APP_VERSION
+export APP_DOMAIN=traefik.firma.ucssfcec.local
 
+#cp ./app/default.backup ./app/default
+
+#sed -i 's/server_name ;/server_name '"$APP_DOMAIN"';/g' "./app/default"
+
+echo $APP_IMAGE
+docker build -f app/Dockerfile -t $APP_IMAGE ./app
+
+#rm ./app/default

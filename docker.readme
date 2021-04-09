@@ -1,0 +1,22 @@
+Ingresar a la carpeta /docker
+
+Ejecutar ./build
+
+Salir a la carpeta del proyecto cd ..
+
+Ejecutar ./dock start
+
+
+
+
+
+
+### error js/popper.js
+Ejecutar ./dock composer update
+
+### error storage
+
+Eliminar el archivo /public/storage
+
+Ejecutar ./dock art storage:link
+

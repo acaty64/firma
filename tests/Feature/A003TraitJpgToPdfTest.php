@@ -41,11 +41,11 @@ class A003TraitJpgToPdfTest extends TestCase
 
         $this->assertTrue($response == [
                         'success'  => true,
-                        'filepath' => '/storage/images/out/x/test_prueba_firmado.pdf',
-                        'filename' => 'test_prueba_firmado.pdf'
+                        'filepath' => '/storage/images/out/x/test_prueba[S].pdf',
+                        'filename' => 'test_prueba[S].pdf'
                     ]);
 
-        $newFile = $this->imagePath('out', 'x') . '/test_prueba_firmado.pdf';
+        $newFile = $this->imagePath('out', 'x') . '/test_prueba[S].pdf';
         $this->assertTrue(file_exists($newFile));
 
     }

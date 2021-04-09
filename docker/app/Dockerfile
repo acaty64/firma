@@ -49,17 +49,25 @@ RUN apt-get update \
     && ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
+## RUN apt-get update
+## RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
+## RUN apt-get install -y nodejs
+
+COPY php-fpm.conf /etc/php/7.3/fpm/php-fpm.conf
 
 COPY default /etc/nginx/sites-available/default
 
+COPY local.ini /etc/php/7.3/fpm/conf.d/local.ini
+
 COPY policy.xml /etc/ImageMagick-6/policy.xml
 
-COPY php-fpm.conf /etc/php/7.3/fpm/php-fpm.conf
+RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-WORKDIR /var/www/html
+#WORKDIR /var/www/html
+WORKDIR /usr/share/nginx/html
 
 CMD ["/usr/bin/supervisord"]

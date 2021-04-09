@@ -103,6 +103,7 @@ trait Imagenes
   {
     $file_in = $file_in['filepath'];
     $file_stamp = $file_sign['filepath'];
+    $file_stamp_work = $this->imagePath("work") . basename($file_stamp);
 
     if(!file_exists($file_in)){
       return false;
@@ -114,8 +115,8 @@ trait Imagenes
 
     if(array_key_exists('porc_sign', $file_sign)){
       // $stamp = $this->resizeImage($file_stamp, $file_sign['porc_sign']/100);
-      $this->resizeImagick($file_stamp, $file_sign['porc_sign']/100, $file_stamp);
-      $stamp = new \Imagick($file_stamp);
+      $this->resizeImagick($file_stamp, $file_sign['porc_sign']/100, $file_stamp_work);
+      $stamp = new \Imagick($file_stamp_work);
     }
 
     // $stamp->getImageResolution(300,300);
@@ -261,7 +262,7 @@ trait Imagenes
     $namefile = explode(".", $namefile);
     $namefile = $namefile[0];
 
-    $newfilename = $this->imagePath("out", $user_id) . $namefile . '_firmado.pdf';
+    $newfilename = $this->imagePath("out", $user_id) . $namefile . '[S].pdf';
 
     $files_jpg = [];
     foreach ($files as $file) {
@@ -273,7 +274,7 @@ trait Imagenes
     $pdf->setImageFormat('pdf');
     $pdf->writeImages($newfilename, true);
 
-    $newfile = '/storage/images/out/' . $user_id . '/' . $namefile . '_firmado.pdf';
+    $newfile = '/storage/images/out/' . $user_id . '/' . $namefile . '[S].pdf';
     return [
       'success' => true,
       'filepath' => $newfile,

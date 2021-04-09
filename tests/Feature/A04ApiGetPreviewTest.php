@@ -53,7 +53,7 @@ class A04ApiGetPreviewTest extends TestCase
 
         $response->assertStatus(200)
                 ->assertJsonFragment([
-                        'filepath'  => '/storage/images/out/x/PAPEL_MEMBRETADO_3_firmado.pdf'
+                        'filepath'  => '/storage/images/out/x/PAPEL_MEMBRETADO_3[S].pdf'
                     ]);
         $newFile = storage_path() . '/app/public/images/out/x/' . $response['filename'];
 

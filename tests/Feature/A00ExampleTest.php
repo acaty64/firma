@@ -14,7 +14,7 @@ class A00ExampleTest extends TestCase
      *
      * @return void
      */
-    public function testBasicTest()
+    public function testFeatureBasicTest()
     {
         $response = $this->get('/');
 
