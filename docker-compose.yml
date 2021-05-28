@@ -5,7 +5,7 @@ services:
     build:
       context: ./docker/app
       dockerfile: Dockerfile
-    image: firma/app
+    image: acaty/firma:1.0.2
     volumes:
      - .:/var/www/html
     ports:

@@ -28,3 +28,5 @@
     iframe { display:block; width:100%; border:none; }
 </style>
 @endsection
+
+@section('view','app/c1m/download.blade.php')
